@@ -1,0 +1,36 @@
+{
+	"private": true,
+	"name": "lost_in_imagination",
+	"version": "0.0.1",
+	"description": "",
+	"author": "ukonpower",
+	"license": "MIT",
+	"scripts": {
+		"dev": "vite",
+		"build:js": "vite build",
+		"build:png": "jsexe.exe -po -cn ./public/index.js ./public/lost_in_imagination.html",
+		"build": "npm run build:js && npm run build:png"
+	},
+	"workspaces": [
+		"packages/*"
+	],
+	"devDependencies": {
+		"@types/node": "^18.16.1",
+		"@typescript-eslint/eslint-plugin": "^5.33.0",
+		"@typescript-eslint/parser": "^5.33.0",
+		"eslint": "^8.21.0",
+		"eslint-config-mdcs": "^5.0.0",
+		"rollup-plugin-visualizer": "^5.9.0",
+		"typescript": "^4.7.4",
+		"vite": "^3.0.5"
+	},
+	"volta": {
+		"node": "18.16.1"
+	},
+	"dependencies": {
+		"@rollup/plugin-image": "^3.0.2",
+		"@rollup/pluginutils": "^5.0.2",
+		"terser": "^5.17.7",
+		"webgl-memory": "^1.0.15"
+	}
+}
