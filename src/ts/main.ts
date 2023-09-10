@@ -20,7 +20,7 @@ class App {
 			<div class="cw"></div>
 		`;
 
-		document.title = `Lost in Imagination`;
+		document.title = `Demo`;
 
 		this.canvasWrap = document.querySelector( '.cw' )!;
 

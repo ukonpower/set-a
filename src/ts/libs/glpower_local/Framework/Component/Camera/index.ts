@@ -180,8 +180,6 @@ export class Camera extends Component {
 
 			const dist = this.frustum[ 1 ].dot( new Vector().applyMatrix4( entity.matrixWorld ) );
 
-			console.log( dist );
-
 			if ( dist < 0 ) return false; // sphere culled
 
 		}
