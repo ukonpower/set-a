@@ -115,7 +115,7 @@ const shaderUnrollLoop = ( shader: string ) => {
 
 };
 
-export const shaderParse = ( shader: string, defines: Defines, lights?: CollectedLights ) => {
+export const shaderParse = ( shader: string, defines?: Defines, lights?: CollectedLights ) => {
 
 	shader = shaderInclude( shader );
 	shader = shaderInsertLights( shader, lights );
