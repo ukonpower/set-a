@@ -9,11 +9,7 @@ out float o_right;
 uniform float uDuration;
 uniform float uSampleRate;
 
-const float BPM = 76.0;
-
-const float bassMelody[] = float[](
-	8.0,  4.0,  6.0,  1.0,  4.0,  2.0,  5.0,  4.0
-);
+const float BPM = 85.0;
 
 // const float mainCord[] = float[]( 
 // 	2.0 + 0.0,  -3.0 + 0.0,  -2.0 + 0.0,  0.0 + 0.0,  -5.0 + 0.0,  -3.0 + 0.0,  -2.0 + 0.0,  0.0 + 0.0,
@@ -104,11 +100,9 @@ float clap( float time, float loop ) {
 	float loopTime = fract(loop);
 
 	float o = 0.0;
-	o += fbm( loopTime * 700.0 ) * ( 
-		exp( (loopTime - 0.0) * - 8.0 ) * step( 0.0, loopTime ) +
-		exp( (loopTime - 0.15) * - 8.0 ) * step( 0.015, loopTime ) +
-		exp( (loopTime - 0.03) * - 8.0 ) * step( 0.03, loopTime )
-	) * 0.333;
+	o += (fbm( fract(time) * 10400.0 )) * ( 
+		exp( (loopTime - 0.0) * - 5.0 ) * step( 0.0, loopTime )
+	) * 0.8;
 	
 	return o;
 	
@@ -117,7 +111,7 @@ float clap( float time, float loop ) {
 vec2 clap1( float time, float loop ) {
 
 	vec2 o = vec2( 0.0 );
-	float l = loop - 0.75;
+	float l = loop;
 
 	o += clap( time, l ) * float[]( 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 )[int(l)];
 	
@@ -188,13 +182,16 @@ float kick( float time, float loop ) {
 	float envTime = fract( loop );
 
 	float t = time;
-	t -= 0.12 * exp( -70.0 * envTime );
-	t += 0.12;
+	t -= 0.1 * exp( -70.0 * envTime );
+	t += 0.1;
 
 	float o = ( 
 		(smoothstep( -0.8, 0.8, sin( t * 110.0 ) ) * 2.0 - 1.0) +
 		0.0
 	) * exp( envTime * - 8.0 ) * slope( sin( envTime * PI ), 0.998 );
+
+	o = ( smoothstep( -0.5, 0.5, sin( t * 190.0 ) ) * 2.0 - 1.0 ) * smoothstep( 1.0, 0.1, envTime );
+	o *= 0.35;
 
     return o;
 
@@ -202,14 +199,32 @@ float kick( float time, float loop ) {
 
 vec2 kick1( float time, float loop ) {
 
+	float[] fire = float[]( 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0 );
+	float envTime = fract( loop );
+
+	float t = time * 0.3;
+	t -= 0.03 * exp( -80.0 * envTime );
+	t += 0.03;
+
+	float o = ( smoothstep( -0.5, 0.5, sin( t * 900.0 ) ) * 2.0 - 1.0 ) * smoothstep( 1.0, 0.1, envTime ) * fire[ int( loop ) ];
+	o *= 0.35;
+
+    return vec2( o );
+
+}
+
+vec2 kick2( float time, float loop ) {
+
 	vec2 o = vec2( 0.0 );
 
 	float loop2 = loop - 0.25;
 	float loop3 = loop - 0.625;
-	o += kick( time, loop ) * float[]( 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0  )[int( loop )];
-	o += kick( time, loop2 ) * float[]( 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0 )[int( loop2 )];
 
-    return o;
+	o += kick( time, loop ) * float[]( 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0  )[int( loop )];
+	o += kick( time, loop2 ) * float[]( 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0  )[int( loop2 )];
+	o += kick( time, loop3 ) * float[]( 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0 )[int( loop3 )];
+
+	return o;
 
 }
 
@@ -227,7 +242,7 @@ float deepKick( float time, float loop ) {
 		float t = time;
 		t -= 0.15 * exp( -50.0 * envTime );
 
-		float b = ( 
+		float b = (
 			(smoothstep( -1.0, 1.0, sin( t * 195.0 ) ) * 2.0 - 1.0) +
 			0.0
 		) * exp( envTime * - 10.0 ) * slope( sin( envTime * PI ), 0.998 );
@@ -247,22 +262,51 @@ float deepKick( float time, float loop ) {
 	BASS
 -------------------------------*/
 
+const float bassMelody[] = float[](
+	7.0, 5.0, 7.0, 7.0, 7.0, 7.0, 7.0, 7.0
+);
 
 vec2 bass( float time, float loop ) {
 
 	int index = int( loop );
-	float envTime = fract( loop );
+	float envTimeR = fract( loop );
+	float envTime = envTimeR;
+	float cut = slope( sin( envTime * PI ), 0.6 );
+
+	if( loop > 2.0 ) {
+
+		envTime = envTimeR = (loop - 2.0) / 6.0;
+		cut = slope( sin( envTime * PI ), 0.9 );
+		
+		if( loop >= 6.0 ) {
+
+			envTimeR = loop /= 3.0;
+
+		}
+	}
 
 	vec2 o;
 
-	for( int i = 0; i < 4; i++ ) {
+	for( int i = 0; i < 8; i++ ) {
 
 		float fi = float( i ) / 8.0;
 
-		float w = smoothstep( 0.1, 0.5, ssin( s2f( -45.0 + fi + bassMelody[index] ) * ( time + fi ) ) ) * 2.0 - 1.0;
-		w *= .1;
-		w *= smoothstep( 0.0, 1.0, sin( envTime * PI ) );
-		o += w * ( sin( envTime * PI * 64.0 - PI / 2.0 ) * 0.5 + 0.5 );
+		float w = saw( s2f( 24.0 * float( i ) + bassMelody[index] ) * ( time + fi * 0.  ) * pow( 0.5, 5.0 ) );
+		w *= sin( envTimeR * TPI * 4.0 ) * 0.4 + 0.6;
+		w *= .01;
+		w *= cut;
+		o += w;
+		
+	}
+
+	for( int i = 0; i < 3; i++ ) {
+
+		float fi = float( i ) / 3.0;
+
+		float w = tri( s2f(  12.0 * float( i ) + bassMelody[index] ) * ( time + fi * 0.25 ) * pow( 0.5, 4.0 ) );
+		w *= .08;
+		w *= cut;
+		o += w;
 		
 	}
 
@@ -294,7 +338,7 @@ vec2 cord( float time, float loop ) {
 	}
 
 	o *= 0.0;
-
+ 
 	return o;
 	
 }
@@ -399,8 +443,6 @@ vec2 ambient( float time, float loop ) {
 
 }
 
-
-
 vec2 music( float time ) {
 
 	float t = time * (BPM / 60.0);
@@ -424,27 +466,30 @@ vec2 music( float time ) {
 
 	// click
 
-	// if( isin( loop32Phase, 0.0001, 100.0 ) ) {
+	if( isin( loop32Phase, 0.0001, 100.0 ) ) {
 
-	// 	o += step( fract( loop4 ), 0.1 ) * ssin( time * s2f(3.0) * 2.0 ) * 0.03;
-	// 	o += step( fract( loop4 / 4.0 ), 0.05 ) * ssin( time * s2f(12.0) * 2.0 ) * 0.02;
+		o += step( fract( loop4 ), 0.1 ) * ssin( time * s2f(3.0) * 2.0 ) * 0.03;
+		o += step( fract( loop4 / 4.0 ), 0.05 ) * ssin( time * s2f(12.0) * 2.0 ) * 0.02;
 
-	// }
+	}
 	
 	// sounds
 	
 	
 	if( isin( loop32Phase, 0.0, 100.0 ) || isin( loop32Phase, 6.0, 8.0 ) ) {
 
+		// o += kick1( time, loop16 / 2.0 ) * 0.7;
 
-		o += kick1( time, loop16 / 2.0 ) * 0.7;
+		o += kick2( time, loop16 / 2.0 ) * 0.7;
 
 		o += cha1( time, loop16 / 2.0 );
 
-		o += bass( time, loop32 / 8.0 );
+		o += bass( time, loop4 * 2.0 );
 
+		o += clap1( time, loop16 ) * 1.0;
 
 		// o += lead2( time, loop16 * 4.0 ) * 0.1;
+		
 	}
 	
 	// if( isin( loop32Phase, 1.0, 7.0 ) ) {
