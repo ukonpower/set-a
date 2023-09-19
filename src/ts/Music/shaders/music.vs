@@ -11,22 +11,6 @@ uniform float uSampleRate;
 
 const float BPM = 85.0;
 
-const float mainCord[] = float[]( 
-	5.0,  8.0,  12.0,  10.0,  4.0, 5.0,  8.0,  12.0,  10.0,  4.0
-);
-
-const float mainMelody[] = float[](
-	2.0 - 0.0,  0.0 - 0.0,  2.0 - 0.0,  5.0 - 0.0,  4.0 - 0.0,  2.0 - 0.0,  5.0 - 0.0,  4.0 - 0.0, 
-	2.0 - 2.0,  0.0 - 2.0,  2.0 - 2.0,  5.0 - 1.0,  4.0 - 2.0,  2.0 - 2.0,  5.0 - 1.0,  4.0 - 2.0, 
-	2.0 - 4.0,  1.0 - 4.0,  2.0 - 4.0,  5.0 - 3.0,  4.0 - 4.0,  2.0 - 4.0,  5.0 - 3.0,  4.0 - 4.0, 
-	2.0 - 2.0,  0.0 - 2.0,  2.0 - 2.0,  5.0 - 1.0,  4.0 - 2.0,  2.0 - 2.0,  5.0 - 1.0,  4.0 - 2.0, 
-	
-	2.0 - 0.0,  0.0 - 0.0,  2.0 - 0.0,  5.0 - 0.0,  4.0 - 0.0,  2.0 - 0.0,  5.0 - 0.0,  4.0 - 0.0, 
-	2.0 - 2.0,  0.0 - 2.0,  2.0 - 2.0,  5.0 - 1.0,  4.0 - 2.0,  2.0 - 2.0,  5.0 - 1.0,  4.0 - 2.0, 
-	2.0 - 4.0,  1.0 - 4.0,  2.0 - 4.0,  5.0 - 3.0,  4.0 - 4.0,  2.0 - 4.0,  5.0 - 3.0,  4.0 - 4.0, 
-	2.0 - 2.0,  0.0 - 2.0,  2.0 - 2.0,  5.0 - 1.0,  4.0 - 2.0,  2.0 - 2.0,  5.0 - 1.0,  4.0 - 2.0	
-);
-
 /*-------------------------------
 	Utils
 -------------------------------*/
@@ -224,6 +208,22 @@ vec2 kick1( float time, float loop ) {
 
 }
 
+vec2 kick2( float time, float loop ) {
+
+	vec2 o = vec2( 0.0 );
+
+	float loop2 = loop - 0.25;
+	float loop3 = loop - 0.625;
+
+	o += kick( time, loop ) * float[]( 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0  )[int( loop )];
+	o += kick( time, loop2 ) * float[]( 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0  )[int( loop2 )];
+	o += kick( time, loop3 ) * float[]( 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0 )[int( loop3 )];
+
+
+	return o;
+
+}
+
 /*-------------------------------
 	Mooooon
 -------------------------------*/
@@ -233,15 +233,14 @@ float moooon( float time, float loop ) {
 	float envTime = fract( loop );
 
 	float t = time;
-	t -= 0.7 * exp( -9.0 * envTime );
-	t += 0.7;
+	t -= 1.0 * exp( -7.0 * envTime );
 
-	o = ( smoothstep( -1.0, 1.0, sin( t * 200.0 ) ) * 2.0 - 1.0 ) * smoothstep( 1.0, 0.1, envTime );
-	o *= 0.15;
+	o = ( smoothstep( -1.0, 1.0, sin( t * 200.0 ) ) * 2.0 - 1.0 ) * smoothstep( 1.0, 0.0, envTime );
+	o *= 0.35;
 
     return o;
 
-}
+} 
 
 /*-------------------------------
 	xylophone
@@ -252,31 +251,44 @@ const float xylophoneMelody[] = float[](
 	4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0,
 	4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0,
 	4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0
-
-	// 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0,
-	// 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 4.0, 9.0, 11.0, 9.0, 11.0,
-	// 6.0, 9.0, 11.0, 6.0, 9.0, 11.0, 6.0, 9.0, 11.0, 6.0, 9.0, 11.0, 6.0, 9.0, 11.0,
-	// 6.0, 5.0, 11.0, 5.0, 9.0, 11.0, 5.0, 9.0, 11.0, 5.0, 4.0, 11.0, 4.0, 9.0, 11.0, 4.0, 11.0
 );
 
+const float xylophoneMelody2[] = float[](
+	4.0, 9.0, 11.0, 16.0, 18.0, 16.0, 11.0, 9.0,
+	4.0, 9.0, 11.0, 16.0, 18.0, 16.0, 11.0, 9.0,
+	4.0, 9.0, 11.0, 16.0, 18.0, 16.0, 11.0, 9.0,
+	4.0, 9.0, 11.0, 16.0, 18.0, 16.0, 11.0, 9.0,
+	6.0, 9.0, 11.0, 16.0, 18.0, 16.0, 11.0, 9.0,
+	6.0, 9.0, 11.0, 16.0, 18.0, 16.0, 11.0, 9.0,
+	6.0, 9.0, 11.0, 16.0, 18.0, 16.0, 11.0, 9.0,
+	6.0, 9.0, 11.0, 16.0, 18.0, 16.0, 11.0, 9.0
+);
 
-vec2 xylophone1( float time, float loop ) {
+vec2 xylophone1( float time, float loop, float type ) {
 
 	vec2 o = vec2( 0.0 );
 
 	float envTime = fract( loop );
 
 	float t = time;
-	t -= 0.1 * exp( -70.0 * envTime );
-	t += 0.1;
+	t -= 0.02 * exp( -70.0 * envTime );
+	t += 0.02;
 
 	float s = xylophoneMelody[int( loop )];
 
+	if( type == 1.0 ) {
+
+		s = xylophoneMelody2[int( loop )];
+		
+	}
+
 	for(int i = 0; i < 1; i++){
 
-		float v = ( smoothstep( -0.5, 0.5, ssin( t * s2f( s + 24.0 * float( i ) ) ) ) * 2.0 - 1.0 ) * smoothstep( 1.0, 0.1, envTime );
+		float fi = float( i ) / 2.0;
 
-		o += v * 0.03;
+		float v = ( smoothstep( -0.5, 0.5, ssin( t * s2f( s + 12.0 * float( i ) ) ) ) * 2.0 - 1.0 ) * smoothstep( 1.0, 0.1, envTime );
+
+		o += v * 0.03 * ( 1.0 - fi * 1.5 );
 		
 	}
 
@@ -345,19 +357,22 @@ vec2 dada( float time, float loop ) {
 		float scale = organCord[ index + 8 * i ];
 		float frec = s2f(4.0 + float(i) * 12.0 ) * pow( 0.5, 4.0 ); 
 
-		float v = saw( time * frec + ssin( w * 22.0 ) + TPI * fi );
+		float v = saw( time * frec + ssin( w * 20.0 ) + TPI * fi ) * abs( pow( sin( w * TPI ), 3.0 ));
 
 		o.x += v * ( sin( fi * TPI ) * 0.5 + 0.5 );
 		o.y += v * ( cos( fi * TPI ) * 0.5 + 0.5 );
 
+		frec = s2f(4.0 + float(i) * 12.0 ) * pow( 0.5, 10.0 ); 
+		v = tri( time * frec + ssin( w * 21.0 ) + TPI * fi ) * abs( pow( sin( w * TPI ), 1.0 )) * 0.8;
+
+		o.x += v * ( sin( PI / 2.0 + fi * TPI ) * 0.5 + 0.5 );
+		o.y += v * ( cos( PI / 2.0 + fi * TPI ) * 0.5 + 0.5 );
 
 	}
 
-	o *= abs( pow( sin( w * TPI ), 3.0 ) );
-
 	o *= isin(w, 1.0, 2.0 ) && isin(loop, 1.75, 2.0 ) ? 1.0 : 0.0 ;
 	
-	o *= 0.08;
+	o *= 0.05;
 
 	return o;
 	
@@ -393,41 +408,66 @@ vec2 music( float time ) {
 
 	}
 	
-	// sounds
-	
+	// intro
 	
 	if( isin( loop32Phase, 0.0001, 0.875 ) ) {
 
-		o += xylophone1( time, loop16 * 4.0 );
-
+		o += xylophone1( time, loop16 * 4.0, 0.0 );
+		o += clap1( time, loop16 / 2.0 );
 		o += dada( time, loop8 / 4.0 );
 
-
 	}
 
-	if( isin( loop32Phase, 0.5, 0.875 ) ) {
-
-		o += clap1( time, loop16 / 2.0 );
-
-	}
+	// dada
 
 	if( isin( loop32Phase, 0.875, 1.0 ) ) {
 
 		o += moooon( time, loop16 / 4.0 );
+		o += dada( time, loop8 / 4.0 ) * 1.5;
 
+	}
+
+	// phase1
+
+	if( isin( loop32Phase, 1.0, 3.0 ) ) {
+
+		o += xylophone1( time, loop16 * 4.0, 0.0 );
+		o += dada( time, loop8 / 4.0 );
+
+		if( isin( loop32Phase, 1.0, 2.81 ) ) {
+
+			o += clap1( time, loop16 / 2.0 );
+			o += kick2( time, loop16 / 2.0 );
+
+		} else {
+
+			o += moooon( time, loop16 / 4.0 );
+
+		}
+
+	}
+
+	if( isin( loop32Phase, 3.0, 4.0 ) ) {
+
+		o += clap1( time, loop16 / 2.0 );
+		o += dada( time, loop8 / 4.0 );
+		o += kick2( time, loop16 / 2.0 );
+
+	}
+
+	if( isin( loop32Phase, 4.0, 5.0 ) ) {
+
+		o += kick2( time, loop16 / 2.0 );
 		o += dada( time, loop8 / 4.0 );
 
 	}
 
-	if( isin( loop32Phase, 1.0, 100.0 ) ) {
+	if( isin( loop32Phase, 5.0, 7.0 ) ) {
 
-		o += kick1( time, loop16 / 2.0 ) * 0.7;
-
-		o += clap1( time, loop16 / 2.0 );
-
-		o += xylophone1( time, loop16 * 4.0 );
-
+		o += xylophone1( time, loop16 * 4.0, 1.0 );
 		o += dada( time, loop8 / 4.0 );
+		o += clap1( time, loop16 / 2.0 );
+		o += kick2( time, loop16 / 2.0 );
 
 	}
 
