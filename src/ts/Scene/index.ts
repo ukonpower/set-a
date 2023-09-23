@@ -4,6 +4,7 @@ import { blidge, gl, globalUniforms, power } from '../Globals';
 
 import { MainCamera } from './Entities/MainCamera';
 import { Renderer } from './Renderer';
+import { createTextures } from './Textures';
 
 
 export class Scene extends GLP.EventEmitter {
@@ -61,6 +62,10 @@ export class Scene extends GLP.EventEmitter {
 		this.camera = new MainCamera( { renderTarget: { gBuffer, deferredBuffer, forwardBuffer } } );
 		this.camera.position.set( 0, 0, 4 );
 		this.root.add( this.camera );
+
+		// textures
+
+		createTextures();
 
 		// carpenter
 

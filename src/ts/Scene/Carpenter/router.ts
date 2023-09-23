@@ -2,6 +2,8 @@ import * as GLP from 'glpower';
 
 import { DustParticles } from '../Entities/DustParticles';
 import { Floor } from '../Entities/Floor';
+import { Chopsticks } from '../Entities/Chopsticks';
+import { Chahan } from '../Entities/Dishes/Chahan';
 
 export const router = ( node: GLP.BLidgeNode ) => {
 
@@ -14,6 +16,14 @@ export const router = ( node: GLP.BLidgeNode ) => {
 	} else if ( node.class == "Floor" ) {
 
 		return new Floor();
+
+	} else if ( node.class == 'Chop' ) {
+
+		return new Chopsticks();
+
+	} else if ( node.class == "Chahan" ) {
+
+		return new Chahan();
 
 	}
 

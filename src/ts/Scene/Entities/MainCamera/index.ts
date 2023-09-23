@@ -554,7 +554,7 @@ export class MainCamera extends GLP.Entity {
 			this.composite,
 		];
 
-		if ( process.env.NODE_ENV == "development" ) {
+		if ( process.env.NODE_ENV == "development" && true ) {
 
 			passes = [
 				this.lightShaft,

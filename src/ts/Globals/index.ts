@@ -44,6 +44,7 @@ export const globalUniforms: {[key: string]: GLP.Uniforms} = {
 			type: 'Matrix4fv'
 		}
 	},
+	tex: {}
 };
 
 
@@ -55,5 +56,4 @@ import { GPUState } from '../libs/GPUState';
 export let gpuState: GPUState | undefined = undefined;
 
 import 'webgl-memory';
-import { Renderer } from '../Scene/Renderer';
 gpuState = new GPUState();

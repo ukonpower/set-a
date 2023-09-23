@@ -46,7 +46,7 @@ export class Material extends Component {
 		super();
 
 		this.name = opt.name || '';
-		this.type = opt.type || [];
+		this.type = opt.type || [ "deferred", "shadowMap" ];
 
 		this.visibilityFlag = {
 			shadowMap: this.type.indexOf( 'shadowMap' ) > - 1,

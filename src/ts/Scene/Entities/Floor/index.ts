@@ -3,9 +3,6 @@ import * as GLP from 'glpower';
 import floorFrag from './shaders/floor.fs';
 import { globalUniforms } from '~/ts/Globals';
 import { hotGet, hotUpdate } from '~/ts/libs/glpower_local/Framework/Utils/Hot';
-import { TexProcedural } from '~/ts/libs/TexBaker';
-
-import noiseFrag from './shaders/noise.fs';
 
 export class Floor extends GLP.Entity {
 
@@ -13,19 +10,10 @@ export class Floor extends GLP.Entity {
 
 		super();
 
-		const noiseTex = new TexProcedural( {
-			frag: noiseFrag
-		} );
-
 		const mat = this.addComponent( "material", new GLP.Material( {
 			name: "floor",
 			type: [ "deferred", "shadowMap" ],
-			uniforms: GLP.UniformsUtils.merge( globalUniforms.time, {
-				uTex: {
-					value: noiseTex,
-					type: '1i'
-				}
-			} ),
+			uniforms: GLP.UniformsUtils.merge( globalUniforms.time, { uNoiseTex: globalUniforms.tex.uNoiseTex } ),
 			frag: hotGet( 'floorFrag', floorFrag )
 		} ) );
 

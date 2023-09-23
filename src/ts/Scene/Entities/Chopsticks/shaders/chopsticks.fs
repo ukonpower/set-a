@@ -1,18 +1,16 @@
 #include <common>
 #include <packing>
 #include <frag_h>
+#include <rotate>
 
-#include <re>
-
-uniform vec3 cameraPosition;
-uniform vec2 uResolution;
-uniform float uAspectRatio;
-
+uniform sampler2D uTex;
 
 void main( void ) {
 
 	#include <frag_in>
+
 	
+
 	#include <frag_out>
 
 } 
