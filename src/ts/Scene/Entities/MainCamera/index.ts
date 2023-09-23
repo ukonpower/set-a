@@ -19,7 +19,6 @@ import ssCompositeFrag from './shaders/ssComposite.fs';
 import compositeFrag from './shaders/composite.fs';
 import { OrbitControls } from '../../Components/OrbitControls';
 import { ShakeViewer } from '../../Components/ShakeViewer';
-import { RotateViewer } from '../../Components/RotateViewer';
 
 export class MainCamera extends GLP.Entity {
 
@@ -538,24 +537,48 @@ export class MainCamera extends GLP.Entity {
 			renderTarget: null
 		} );
 
-		this.addComponent( "postprocess", new GLP.PostProcess( {
-			input: param.renderTarget.forwardBuffer.textures,
-			passes: [
+		let passes = [
+			this.lightShaft,
+			this.ssr,
+			this.ssao,
+			this.ssComposite,
+			this.dofCoc,
+			this.dofBokeh,
+			this.dofComposite,
+			this.motionBlurTile,
+			this.motionBlurNeighbor,
+			this.motionBlur,
+			this.fxaa,
+			this.bloomBright,
+			...this.bloomBlur,
+			this.composite,
+		];
+
+		if ( process.env.NODE_ENV == "development" ) {
+
+			passes = [
 				this.lightShaft,
 				this.ssr,
 				this.ssao,
 				this.ssComposite,
 				this.dofCoc,
-				this.dofBokeh,
-				this.dofComposite,
-				this.motionBlurTile,
-				this.motionBlurNeighbor,
-				this.motionBlur,
+				// this.dofBokeh,
+				// this.dofComposite,
+				// this.motionBlurTile,
+				// this.motionBlurNeighbor,
+				// this.motionBlur,
 				this.fxaa,
-				// this.bloomBright,
-				// ...this.bloomBlur,
+				this.bloomBright,
+				...this.bloomBlur,
 				this.composite,
-			] } )
+			];
+
+		}
+
+		this.addComponent( "postprocess", new GLP.PostProcess( {
+			input: param.renderTarget.forwardBuffer.textures,
+			passes
+		} )
 		);
 
 		// events

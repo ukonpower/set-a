@@ -4,8 +4,21 @@ float random(vec2 p){
 	return fract(sin(dot(p.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
-// By Morgan McGuire @morgan3d, http://graphicscodex.com
 // https://www.shadertoy.com/view/4dS3Wd
+
+// By Morgan McGuire @morgan3d, http://graphicscodex.com
+// Reuse permitted under the BSD license.
+
+// All noise functions are designed for values on integer scale.
+// They are tuned to avoid visible periodicity for both positive and
+// negative coordinates within a few orders of magnitude.
+
+// For a single octave
+//#define NOISE noise
+
+// For multiple octaves
+#define NOISE fbm
+#define NUM_NOISE_OCTAVES 5
 
 // Precision-adjusted variations of https://www.shadertoy.com/view/4djSRW
 float hash(float p) { p = fract(p * 0.011); p *= p + 7.5; p *= p + p; return fract(p); }
@@ -17,6 +30,29 @@ float noise(float x) {
     float u = f * f * (3.0 - 2.0 * f);
     return mix(hash(i), hash(i + 1.0), u);
 }
+
+
+float noise(vec2 x) {
+    vec2 i = floor(x);
+    vec2 f = fract(x);
+
+	// Four corners in 2D of a tile
+	float a = hash(i);
+    float b = hash(i + vec2(1.0, 0.0));
+    float c = hash(i + vec2(0.0, 1.0));
+    float d = hash(i + vec2(1.0, 1.0));
+
+    // Simple 2D lerp using smoothstep envelope between the values.
+	// return vec3(mix(mix(a, b, smoothstep(0.0, 1.0, f.x)),
+	//			mix(c, d, smoothstep(0.0, 1.0, f.x)),
+	//			smoothstep(0.0, 1.0, f.y)));
+
+	// Same code, with the clamps in smoothstep and common subexpressions
+	// optimized away.
+    vec2 u = f * f * (3.0 - 2.0 * f);
+	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+}
+
 
 float noise(vec3 x) {
     const vec3 step = vec3(110, 241, 171);
@@ -35,29 +71,45 @@ float noise(vec3 x) {
                    mix( hash(n + dot(step, vec3(0, 1, 1))), hash(n + dot(step, vec3(1, 1, 1))), u.x), u.y), u.z);
 }
 
-// reference: https://thebookofshaders.com/13
 
-#define OCTAVES 5
-float fbm (in vec3 p) {
-    // Initial values
-    float value = 0.0;
-    float amplitude = .5;
-    float frequency = 0.;
-    //
-    // Loop of octaves
-    for (int i = 0; i < OCTAVES; i++) {
-        value += amplitude * noise(p);
-        p *= 2.;
-        amplitude *= .5;
-        if( value < -1.0 ) break;
-    }
-    return value;
+float fbm(float x) {
+	float v = 0.0;
+	float a = 0.5;
+	float shift = float(100);
+	for (int i = 0; i < NUM_NOISE_OCTAVES; ++i) {
+		v += a * noise(x);
+		x = x * 2.0 + shift;
+		a *= 0.5;
+	}
+	return v;
 }
 
-float fbm (in float p) {
 
-    return fbm( vec3( p ) );        
-    
+float fbm(vec2 x) {
+	float v = 0.0;
+	float a = 0.5;
+	vec2 shift = vec2(100);
+	// Rotate to reduce axial bias
+    mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
+	for (int i = 0; i < NUM_NOISE_OCTAVES; ++i) {
+		v += a * noise(x);
+		x = rot * x * 2.0 + shift;
+		a *= 0.5;
+	}
+	return v;
+}
+
+
+float fbm(vec3 x) {
+	float v = 0.0;
+	float a = 0.5;
+	vec3 shift = vec3(100);
+	for (int i = 0; i < NUM_NOISE_OCTAVES; ++i) {
+		v += a * noise(x);
+		x = x * 2.0 + shift;
+		a *= 0.5;
+	}
+	return v;
 }
 
 vec3  fbm3 (in vec3 p) {

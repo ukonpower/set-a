@@ -303,7 +303,8 @@ export class Renderer extends GLP.Entity {
 		}
 
 	}
-	private renderCamera( renderType: GLP.MaterialRenderType, cameraEntity: GLP.Entity, entities: GLP.Entity[], renderTarget: GLP.GLPowerFrameBuffer | null, override?: CameraOverride, clear:boolean = true ) {
+
+	public renderCamera( renderType: GLP.MaterialRenderType, cameraEntity: GLP.Entity, entities: GLP.Entity[], renderTarget: GLP.GLPowerFrameBuffer | null, override?: CameraOverride, clear:boolean = true ) {
 
 		const camera = cameraEntity.getComponent<GLP.Camera>( "camera" ) || cameraEntity.getComponent<GLP.Light>( "light" )!;
 
@@ -399,7 +400,7 @@ export class Renderer extends GLP.Entity {
 
 	}
 
-	private renderPostProcess( postprocess: GLP.PostProcess, matrix?: CameraOverride ) {
+	public renderPostProcess( postprocess: GLP.PostProcess, matrix?: CameraOverride ) {
 
 		// render
 

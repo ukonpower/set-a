@@ -15,7 +15,6 @@ type GLPowerTextureSetting = {
 	generateMipmap: boolean,
 	wrapS: number,
 	wrapT: number,
-	resolutionFactor: number
 }
 
 export class GLPowerTexture {

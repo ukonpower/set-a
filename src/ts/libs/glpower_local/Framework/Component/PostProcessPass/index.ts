@@ -23,7 +23,7 @@ export class PostProcessPass extends Material {
 	public clearColor: Vector | null;
 	public clearDepth: number | null;
 
-	public resolutionFactor: number;
+	public resolutionRatio: number;
 	public passThrough: boolean;
 
 	constructor( param: PostProcessPassParam ) {
@@ -47,7 +47,7 @@ export class PostProcessPass extends Material {
 		this.clearColor = param.clearColor ?? null;
 		this.clearDepth = param.clearDepth ?? null;
 		this.depthTest = param.depthTest !== undefined ? param.depthTest : false;
-		this.resolutionFactor = param.resolutionRatio || 1;
+		this.resolutionRatio = param.resolutionRatio || 1;
 		this.passThrough = param.passThrough ?? false;
 
 	}
@@ -59,7 +59,7 @@ export class PostProcessPass extends Material {
 
 		if ( this.renderTarget ) {
 
-			this.renderTarget.setSize( event.resolution.clone().multiply( this.resolutionFactor ) );
+			this.renderTarget.setSize( event.resolution.clone().multiply( this.resolutionRatio ) );
 
 			this.uniforms.uPPResolution.value.copy( this.renderTarget.size );
 			this.uniforms.uPPPixelSize.value.set( 1.0 / this.renderTarget.size.x, 1.0 / this.renderTarget.size.y );

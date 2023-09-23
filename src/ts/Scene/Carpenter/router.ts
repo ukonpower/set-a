@@ -1,29 +1,19 @@
 import * as GLP from 'glpower';
 
-import { Skybox } from '../Entities/Skybox';
-import { Trees } from '../Entities/Trees';
-import { Terrain } from '../Entities/Terrain';
-import { Poles } from '../Entities/Poles';
+import { DustParticles } from '../Entities/DustParticles';
+import { Floor } from '../Entities/Floor';
 
 export const router = ( node: GLP.BLidgeNode ) => {
 
 	// class
 
-	if ( node.class == "Skybox" ) {
+	if ( node.class == "Dust" ) {
 
-		return new Skybox();
+		return new DustParticles();
 
-	} else if ( node.class == "Trees" ) {
+	} else if ( node.class == "Floor" ) {
 
-		return new Trees();
-
-	} else if ( node.class == "Terrain" ) {
-
-		return new Terrain();
-
-	} else if ( node.class == "UtilityPoles" ) {
-
-		return new Poles();
+		return new Floor();
 
 	}
 

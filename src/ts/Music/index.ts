@@ -123,7 +123,7 @@ export class Music {
 		// gain
 
 		this.gainNode = this.audioCtx.createGain();
-		// this.gainNode.gain.value = 1.5;
+		this.gainNode.gain.value = 1.0;
 
 	}
 

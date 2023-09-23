@@ -1,5 +1,5 @@
 import * as GLP from 'glpower';
-import { blidge, canvas, gpuState, power } from './Globals';
+import { blidge, canvas, gpuState } from './Globals';
 import { Scene } from "./Scene";
 import { Music } from './Music';
 
@@ -120,8 +120,8 @@ class App {
 
 	private resize() {
 
-		const aspect = 16 / 9;
-		const scale = 0.5;
+		const aspect = 16 / 7;
+		const scale = 1.0;
 
 		this.canvas.width = 1920 * scale;
 		this.canvas.height = this.canvas.width / aspect;

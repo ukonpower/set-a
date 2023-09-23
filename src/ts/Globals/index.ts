@@ -55,4 +55,5 @@ import { GPUState } from '../libs/GPUState';
 export let gpuState: GPUState | undefined = undefined;
 
 import 'webgl-memory';
+import { Renderer } from '../Scene/Renderer';
 gpuState = new GPUState();
