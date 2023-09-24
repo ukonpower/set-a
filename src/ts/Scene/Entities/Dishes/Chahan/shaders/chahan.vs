@@ -2,7 +2,7 @@
 #include <vert_h>
 #include <rotate>
 
-#ifdef PARA
+#if defined( PARA ) || defined( SHOGA )
 	layout (location = 3) in vec4 rnd;
 #endif
 
@@ -18,8 +18,6 @@ void main( void ) {
 	#include <vert_in>
 
 	#ifdef PARA
-
-	
 
 		#ifdef KOME
 
@@ -49,12 +47,11 @@ void main( void ) {
 		float sinTheta = sqrt(1.0 - cosTheta * cosTheta);
 		float phi = 1.0 * PI * rnd.y;
 		vec3 o = vec3( sinTheta * cos(phi), sinTheta * sin(phi), cosTheta );
-		o *= ( 0.6 + rnd.z * 0.04 );
+		o *= ( 0.6 );
 
 		mat2 r = rotate( rnd.w * TPI );
 		outPos.xy *= r;
 		outNormal.xy *= r;
-		
 
 		mat3 rot = makeRotationDir( normalize( o ), vec3( 0.0, 1.0, 0.0 ) );
 		outPos *= rot;
@@ -62,6 +59,29 @@ void main( void ) {
 		
 		outPos += o;
 
+	#endif
+
+	#ifdef DUMMY
+
+		outPos *= 1.0 + ( texture( uNoiseTex, uv.xy * 1.0 ).xyz - 0.5 ) * 0.1;
+		outPos *= step( -0.05, outPos.y );
+	
+	#endif
+
+	#ifdef SHOGA
+
+		outPos.x += cos( outPos.z * 10.0 + rnd.w ) * 0.01;
+
+		outPos.z *= sin(rnd.w * 10.0) * 0.2 + 1.0;
+		outPos.z += outPos.x;
+
+		mat2 r = rotate( rnd.w * TPI );
+		outPos.xy *= r;
+		outNormal.xy *= r;
+
+		outPos.xyz += (rnd.xyz - 0.5) * 0.08;
+		outPos.y += 0.04;
+	
 	#endif
 	
 	#include <vert_out>

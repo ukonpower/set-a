@@ -1,5 +1,4 @@
 import common from './shaderModules/common.module.glsl';
-import packing from './shaderModules/packing.module.glsl';
 import sdf from './shaderModules/sdf.module.glsl';
 import noise from './shaderModules/noise.module.glsl';
 import rotate from './shaderModules/rotate.module.glsl';
@@ -55,7 +54,6 @@ export const shaderInclude = ( shader: string ) => {
 
 	const dict : {[key: string]: string} = {
 		"common": common,
-		"packing": packing,
 		"sdf": sdf,
 		"rotate": rotate,
 		"noise": noise,

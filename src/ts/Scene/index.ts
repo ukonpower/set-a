@@ -37,7 +37,7 @@ export class Scene extends GLP.EventEmitter {
 
 		const gBuffer = new GLP.GLPowerFrameBuffer( gl );
 		gBuffer.setTexture( [
-			power.createTexture().setting( { type: gl.FLOAT, internalFormat: gl.RGBA32F, format: gl.RGBA } ),
+			power.createTexture().setting( { type: gl.FLOAT, internalFormat: gl.RGBA32F, format: gl.RGBA, magFilter: gl.NEAREST, minFilter: gl.NEAREST } ),
 			power.createTexture().setting( { type: gl.FLOAT, internalFormat: gl.RGBA32F, format: gl.RGBA } ),
 			power.createTexture(),
 			power.createTexture(),

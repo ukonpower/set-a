@@ -2,6 +2,8 @@ import * as GLP from 'glpower';
 
 import chahanVert from './shaders/chahan.vs';
 import chahanFrag from './shaders/chahan.fs';
+import safaFrag from './shaders/sara.fs';
+
 import { TurnTable } from '~/ts/Scene/Components/TurnTable';
 import { globalUniforms } from '~/ts/Globals';
 
@@ -18,11 +20,12 @@ export class Chahan extends GLP.Entity {
 		-------------------------------*/
 
 		const sara = new GLP.Entity();
-		sara.addComponent( "geometry", new GLP.CylinderGeometry( 1.0, 1.0, 0.05 ) );
+		sara.addComponent( "geometry", new GLP.CylinderGeometry( 1.0, 1.0, 0.45, 8.0 ) );
 		sara.addComponent( "material", new GLP.Material( {
-			vert: chahanVert,
+			frag: safaFrag,
 			defines: { 'SARA': '' }
 		} ) );
+		sara.position.set( 0.0, - 0.08, 0.0 );
 		this.add( sara );
 
 		/*-------------------------------
@@ -72,10 +75,48 @@ export class Chahan extends GLP.Entity {
 
 		}
 
+		/*-------------------------------
+			Dummy
+		-------------------------------*/
 
-		// /*-------------------------------
+		const dummy = new GLP.Entity();
+		dummy.addComponent( "geometry", new GLP.SphereGeometry( 0.605, 100, 100 ) );
+		dummy.addComponent( "material", new GLP.Material( {
+			vert: chahanVert,
+			frag: chahanFrag,
+			defines: { 'DUMMY': '' }
+		} ) );
+		this.add( dummy );
 
-		// -------------------------------*/
+		/*-------------------------------
+			Shoga
+		-------------------------------*/
+
+		const shoga = new GLP.Entity();
+		const shogaGeo = new GLP.CubeGeometry( 0.02, 0.02, 0.3, 1.0, 1.0, 10 );
+		shogaGeo.setAttribute( 'rnd', new Float32Array( ( ()=>{
+
+			const num = 20;
+
+			const r: number[] = [];
+			for ( let j = 0; j < num; j ++ ) {
+
+				r.push( Math.random(), Math.random(), Math.random(), Math.random() );
+
+			}
+
+			return r;
+
+		} )() ), 4, { instanceDivisor: 1 } );
+		shoga.addComponent( "geometry", shogaGeo );
+		shoga.addComponent( "material", new GLP.Material( {
+			vert: chahanVert,
+			frag: chahanFrag,
+			defines: { 'SHOGA': '' }
+		} ) );
+		shoga.position.set( 0.67, 0.02, 0.0 );
+		this.add( shoga );
+
 
 	}
 

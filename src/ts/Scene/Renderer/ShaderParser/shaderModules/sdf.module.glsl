@@ -1,3 +1,35 @@
+
+// operators
+
+vec2 add( vec2 d1, vec2 d2 ) {
+	return d1.x < d2.x ? d1 : d2;
+}
+
+vec2 sub( vec2 d1, vec2 d2 ) {
+	d2 *= -1.0;
+	return d1.x < d2.x ? d2 : d1;
+}
+
+float smoothAdd( float d1, float d2, float k ) {
+    float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
+    return mix( d2, d1, h ) - k*h*(1.0-h);
+}
+
+float opRound( float d, float rad )
+{
+  return d - rad;
+}
+
+// utils
+
+// https://neort.io/product/bvcrf5s3p9f7gigeevf0
+
+vec2 pmod(vec2 p, float n)
+{
+  float a=mod(atan(p.y, p.x),TPI/n)-.5 *TPI/n;
+  return length(p)*vec2(sin(a),cos(a));
+}
+
 // https://iquilezles.org/articles/distfunctions/
 
 float sdPlane( vec3 p, vec3 n, float h )
@@ -54,30 +86,4 @@ float sdOctahedron( vec3 p, float s)
 {
   p = abs(p);
   return (p.x+p.y+p.z-s)*0.57735027;
-}
-
-// operators
-
-vec2 add( vec2 d1, vec2 d2 ) {
-	return d1.x < d2.x ? d1 : d2;
-}
-
-vec2 sub( vec2 d1, vec2 d2 ) {
-	d2 *= -1.0;
-	return d1.x < d2.x ? d2 : d1;
-}
-
-float smoothAdd( float d1, float d2, float k ) {
-    float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
-    return mix( d2, d1, h ) - k*h*(1.0-h);
-}
-
-// utils
-
-// https://neort.io/product/bvcrf5s3p9f7gigeevf0
-
-vec2 pmod(vec2 p, float n)
-{
-  float a=mod(atan(p.y, p.x),TPI/n)-.5 *TPI/n;
-  return length(p)*vec2(sin(a),cos(a));
 }

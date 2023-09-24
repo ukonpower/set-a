@@ -18,7 +18,7 @@ uniform mat4 projectionMatrix;
 
 #ifdef IS_DEFERRED
 	layout (location = 0) out vec4 outColor0; // position, depth
-	layout (location = 1) out vec4 outColor1; // normal 
+	layout (location = 1) out vec4 outColor1; // normal, sscolor
 	layout (location = 2) out vec4 outColor2; // albedo, roughness
 	layout (location = 3) out vec4 outColor3; // emission, metalic
 	layout (location = 4) out vec4 outColor4; // velocity

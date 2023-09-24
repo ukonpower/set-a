@@ -15,7 +15,7 @@ void main( void ) {
 	#ifdef KOME
 
 		outRoughness = 0.4;
-		outColor.xyz *= vec3( 1.0, 0.90, 0.7 ) ;
+		outColor.xyz *= vec3( 1.0, 0.90, 0.7 );
 
 	#endif
 
@@ -34,15 +34,33 @@ void main( void ) {
 
 	#ifdef TAMAGO
 
-		// outColor = vec4( 1.0, 0.9, 0.0, 1.0 );
 		outColor = mix( vec4( 1.0, 0.9, 0.0, 1.00 ), vec4( 1.0, 0.0,0.0, 1.0 ), abs(vUv.x - 0.5) * 0.5 );
 		outRoughness = n.x;
 
+	#endif
+
+	#ifdef DUMMY
+
+		outColor.xyz *= vec3( 1.0, 0.90, 0.7 );
+		outNormal += (texture( uNoiseTex, vUv.xy * 5.0 ).xyz - 0.5) * 2.0;
 
 	#endif
 
-	outEmission += smoothstep( 1.0, 0.0, dnv ) * vec3( 1.0, 0.6, 0.0 ) * 0.5;
-	outRoughness *= 0.01;
+	#ifdef SHOGA
+
+		outColor = mix( vec4( 1.0, 0.1, 0.3, 1.0 ), vec4( 0.5, 0.0, 0.0 , 1.0 ), abs(vUv.x - 0.5) * 2.0 );
+
+		outEmission += (1.0 - dnv) * vec3( 1.0, 0.3, 0.1 ) * 0.5;
+		outRoughness = 0.3;
+		outNormal += n.xyz * 0.5;
+
+	#else
+		
+		outEmission += (1.0 - dnv) * vec3( 1.0, 0.6, 0.0 ) * 0.5;
+		outRoughness *= 0.1;
+
+	#endif
+	
 
 	#include <frag_out>
 

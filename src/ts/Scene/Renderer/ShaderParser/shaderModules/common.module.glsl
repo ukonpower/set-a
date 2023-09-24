@@ -58,6 +58,8 @@ float atan2(in float y, in float x){
 
 #define linearstep(edge0, edge1, x) min(max(((x) - (edge0)) / ((edge1) - (edge0)), 0.0), 1.0)
 
+// easing
+
 float easeInOut( float x ) {
 
 	return x < 0.5 ? 8.0 * x * x * x * x : 1.0 - pow(-2.0 * x + 2.0, 4.0) / 2.0;
@@ -86,8 +88,23 @@ float easeBounce( float t, float b ) {
 	
 }
 
+// hsv
+
 vec3 hsv2rgb( vec3 hsv ) {
 
 	return ((clamp(abs(fract(hsv.x+vec3(0,2,1)/3.)*6.-3.)-1.,0.,1.)-1.)*hsv.y+1.)*hsv.z;
 	
+}
+
+// paking
+
+vec4 floatToRGBA( float v ) {
+	vec4 enc = vec4(1.0, 255.0, 65025.0, 16581375.0) * v;
+	enc = fract(enc);
+	enc -= enc.yzww * vec4(1.0/255.0,1.0/255.0,1.0/255.0,0.0);
+	return enc;
+}
+
+float rgbaToFloat( vec4 rgba ) {
+	return dot( rgba, vec4(1.0, 1.0/255.0, 1.0/65025.0, 1.0/16581375.0) );
 }
