@@ -2,10 +2,10 @@ import * as GLP from 'glpower';
 
 import chahanVert from './shaders/chahan.vs';
 import chahanFrag from './shaders/chahan.fs';
-import safaFrag from './shaders/sara.fs';
 
 import { TurnTable } from '~/ts/Scene/Components/TurnTable';
 import { globalUniforms } from '~/ts/Globals';
+import { Dish } from '../Dish';
 
 export class Chahan extends GLP.Entity {
 
@@ -19,12 +19,7 @@ export class Chahan extends GLP.Entity {
 			Sara
 		-------------------------------*/
 
-		const sara = new GLP.Entity();
-		sara.addComponent( "geometry", new GLP.CylinderGeometry( 1.0, 1.0, 0.45, 8.0 ) );
-		sara.addComponent( "material", new GLP.Material( {
-			frag: safaFrag,
-			defines: { 'SARA': '' }
-		} ) );
+		const sara = new Dish();
 		sara.position.set( 0.0, - 0.08, 0.0 );
 		this.add( sara );
 
@@ -58,16 +53,19 @@ export class Chahan extends GLP.Entity {
 
 			} )() ), 4, { instanceDivisor: 1 } );
 
+			const defines: any = {
+				'PARA': '',
+			};
+
+			defines[ [ "KOME", "NEGI", "NIKU", "TAMAGO" ][ i ] ] = '';
+
 			para.addComponent( "geometry", parageo );
 			para.addComponent( "material", new GLP.Material( {
 				name: "para" + i,
 				vert: chahanVert,
 				frag: chahanFrag,
 				uniforms: GLP.UniformsUtils.merge( { uNoiseTex: globalUniforms.tex.uNoiseTex } ),
-				defines: {
-					'PARA': '',
-					...[ { "KOME": '' }, { "NEGI": '' }, { "NIKU": '' }, { "TAMAGO": '' } ][ i ]
-				},
+				defines,
 				cullFace: false,
 			} ) );
 			para.position.set( 0.0, 0.0, 0.0 );
