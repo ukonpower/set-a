@@ -6,6 +6,7 @@ in vec3 vPos;
 in vec3 vMVPosition;
 in vec3 vMVPPosition;
 in vec2 vVelocity;
+
 uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;

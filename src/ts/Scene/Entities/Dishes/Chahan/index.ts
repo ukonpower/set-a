@@ -3,6 +3,7 @@ import * as GLP from 'glpower';
 import chahanVert from './shaders/chahan.vs';
 import chahanFrag from './shaders/chahan.fs';
 import { TurnTable } from '~/ts/Scene/Components/TurnTable';
+import { globalUniforms } from '~/ts/Globals';
 
 export class Chahan extends GLP.Entity {
 
@@ -10,7 +11,7 @@ export class Chahan extends GLP.Entity {
 
 		super();
 
-		this.addComponent( 'rotateview', new TurnTable( 3 ) );
+		this.addComponent( 'rotateview', new TurnTable( 1 ) );
 
 		/*-------------------------------
 			Sara
@@ -28,7 +29,12 @@ export class Chahan extends GLP.Entity {
 			PARAPARA
 		-------------------------------*/
 
-		const geos = [ new GLP.SphereGeometry( 0.05, 10, 5 ), new GLP.CubeGeometry( 0.05, 0.08, 0.01 ), new GLP.CubeGeometry( 0.06, 0.06, 0.06 ), new GLP.CubeGeometry( 0.05, 0.05, 0.05 ) ];
+		const geos = [
+			new GLP.SphereGeometry( 0.05, 10, 5 ),
+			new GLP.CylinderGeometry( 0.03, 0.03, 0.02, 10, 10, false ),
+			new GLP.CubeGeometry( 0.035, 0.1, 0.035, 1.0, 10.0, 1.0 ),
+			new GLP.CubeGeometry( 0.05, 0.07, 0.02 )
+		];
 
 		for ( let i = 0; i < 4; i ++ ) {
 
@@ -36,7 +42,7 @@ export class Chahan extends GLP.Entity {
 			const parageo = geos[ i ];
 			parageo.setAttribute( 'rnd', new Float32Array( ( ()=>{
 
-				const num = [ 1000, 150, 50, 100, 0 ][ i ];
+				const num = [ 1000, 50, 20, 50, 0 ][ i ] * 1.0;
 
 				const r: number[] = [];
 				for ( let j = 0; j < num; j ++ ) {
@@ -54,10 +60,12 @@ export class Chahan extends GLP.Entity {
 				name: "para" + i,
 				vert: chahanVert,
 				frag: chahanFrag,
+				uniforms: GLP.UniformsUtils.merge( { uNoiseTex: globalUniforms.tex.uNoiseTex } ),
 				defines: {
 					'PARA': '',
 					...[ { "KOME": '' }, { "NEGI": '' }, { "NIKU": '' }, { "TAMAGO": '' } ][ i ]
-				}
+				},
+				cullFace: false,
 			} ) );
 			para.position.set( 0.0, 0.0, 0.0 );
 			this.add( para );
