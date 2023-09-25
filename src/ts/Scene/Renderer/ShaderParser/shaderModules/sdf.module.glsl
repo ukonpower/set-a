@@ -11,13 +11,17 @@ vec2 sub( vec2 d1, vec2 d2 ) {
 }
 
 float smoothAdd( float d1, float d2, float k ) {
-    float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
-    return mix( d2, d1, h ) - k*h*(1.0-h);
+  float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
+  return mix( d2, d1, h ) - k*h*(1.0-h);
 }
 
-float opRound( float d, float rad )
-{
+float opRound( float d, float rad ) {
   return d - rad;
+}
+
+
+float opOnion( in float d, in float thickness ) {
+  return abs( d )-thickness;
 }
 
 // utils
@@ -47,12 +51,6 @@ float sdBox( vec3 p, vec3 b )
 {
   vec3 q = abs(p) - b;
   return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0);
-}
-
-float sdRoundBox( vec3 p, vec3 b, float r )
-{
-  vec3 q = abs(p) - b;
-  return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0) - r;
 }
 
 float sdPyramid( vec3 p, float h)

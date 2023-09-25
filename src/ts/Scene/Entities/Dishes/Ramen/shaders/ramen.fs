@@ -1,5 +1,7 @@
 #include <common>
 #include <packing>
+#include <light_h>
+#include <re>
 #include <frag_h>
 
 uniform vec3 cameraPosition;
@@ -12,11 +14,30 @@ void main( void ) {
 	float dnv = dot( vViewNormal, normalize( -vMVPosition ) );
 	vec4 n = texture( uNoiseTex, vUv * 1.0 );
 	
-	#ifdef KOME
+	#ifdef SOUP
 
-		outRoughness = 0.4;
-		outColor.xyz *= vec3( 1.0, 0.90, 0.7 );
-
+		//[
+		vec3 albedo = vec3( 0.4, 0.08, 0.0 );
+		Geometry geo = Geometry(
+			vPos,
+			normalize( vNormal ),
+			0.0,
+			normalize( cameraPosition - vPos ),
+			vec3( 0.0 )
+		);
+		Material mat = Material(
+			albedo.xyz,
+			0.15,
+			outMetalic,
+			outEmission,
+			mix( albedo.xyz, vec3( 0.0, 0.0, 0.0 ), outMetalic ),
+			mix( vec3( 1.0, 1.0, 1.0 ), albedo.xyz, outMetalic )
+		);
+		outColor = vec4( 0.0, 0.0, 0.0, 0.95 );
+		//]
+		
+		#include <light>
+		
 	#endif
 
 	#ifdef NEGI
@@ -24,42 +45,16 @@ void main( void ) {
 		outColor = vec4( 0.1, 0.5, 0.0, 1.0 );
 
 	#endif
-
-	#ifdef NIKU
+	
+	#ifdef MENMA
 
 		outColor = mix( vec4( 0.94, 0.5, 0.4, 1.0 ), vec4( 1.0, 0.0,0.0, 1.0 ), abs(vUv.x - 0.5) * 0.5 );
 		outRoughness = n.x;
 
 	#endif
-
-	#ifdef TAMAGO
-
-		outColor = mix( vec4( 1.0, 0.9, 0.0, 1.00 ), vec4( 1.0, 0.0,0.0, 1.0 ), abs(vUv.x - 0.5) * 0.5 );
-		outRoughness = n.x;
-
-	#endif
-
-	#ifdef DUMMY
-
-		outColor.xyz *= vec3( 1.0, 0.90, 0.7 );
-		outNormal += (texture( uNoiseTex, vUv.xy * 5.0 ).xyz - 0.5) * 2.0;
-
-	#endif
-
-	#ifdef SHOGA
-
-		outColor = mix( vec4( 1.0, 0.1, 0.3, 1.0 ), vec4( 0.5, 0.0, 0.0 , 1.0 ), abs(vUv.x - 0.5) * 2.0 );
-
-		outEmission += (1.0 - dnv) * vec3( 1.0, 0.3, 0.1 ) * 0.5;
-		outRoughness = 0.3;
-		outNormal += n.xyz * 0.5;
-
-	#else
-		
-		outEmission += (1.0 - dnv) * vec3( 1.0, 0.6, 0.0 ) * 0.5;
-		outRoughness *= 0.1;
-
-	#endif
+	
+	outEmission += (1.0 - dnv) * vec3( 1.0, 0.6, 0.0 ) * 0.5;
+	outRoughness *= 0.1;
 	
 
 	#include <frag_out>

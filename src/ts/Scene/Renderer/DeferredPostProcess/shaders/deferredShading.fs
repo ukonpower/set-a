@@ -1,6 +1,6 @@
 #include <common>
 #include <packing>
-#include <light>
+#include <light_h>
 #include <re>
 
 // uniforms
@@ -25,18 +25,11 @@ layout (location = 1) out vec4 glFragOut1;
 
 void main( void ) {
 
-	// inputs
-	
+	//[
 	vec4 tex0 = texture( sampler0, vUv );
 	vec4 tex1 = texture( sampler1, vUv );
 	vec4 tex2 = texture( sampler2, vUv );
 	vec4 tex3 = texture( sampler3, vUv );
-
-	// output
-
-	vec3 outColor = vec3( 0.0 );
-
-	// structs
 
 	Geometry geo = Geometry(
 		tex0.xyz,
@@ -45,7 +38,6 @@ void main( void ) {
 		normalize( cameraPosition - tex0.xyz ),
 		vec3( 0.0 )
 	);
-	
 	Material mat = Material(
 		tex2.xyz,
 		tex2.w,
@@ -54,82 +46,14 @@ void main( void ) {
 		mix( tex2.xyz, vec3( 0.0, 0.0, 0.0 ), tex3.w ),
 		mix( vec3( 1.0, 1.0, 1.0 ), tex2.xyz, tex3.w )
 	);
-
-	float shadow;
-
-	// ambient
-
-	// outColor += 0.4;
-
-	// direcitonalLight
+	vec3 outColor = vec3( 0.0 );
+	//]
 	
-	Light light;
-	LightCamera lightCamera;
+	// output
 
-	#if NUM_LIGHT_DIR > 0 
+	#include <light>
 
-		DirectionalLight dLight;
-
-		#pragma loop_start NUM_LIGHT_DIR
-
-			// shadow
-
-			shadow = getShadowSmooth( tex0.xyz, directionalLightCamera[ LOOP_INDEX ], directionalLightShadowMap[ LOOP_INDEX ] );
-			
-			// lighting
-
-			dLight = directionalLight[ LOOP_INDEX ];
-			light.direction = dLight.direction;
-			light.color = dLight.color;
-
-			outColor += RE( geo, mat, light ) * shadow;
-
-		#pragma loop_end
-	
-	#endif
-
-	#if NUM_LIGHT_SPOT > 0
-
-		SpotLight sLight;
-		
-		vec3 spotDirection;
-		float spotDistance;
-		float spotAngleCos;
-		float spotAttenuation;
-
-		#pragma loop_start NUM_LIGHT_SPOT
-
-			// shadow
-
-			shadow = getShadowSmooth( geo.position, spotLightCamera[ LOOP_INDEX ], spotLightShadowMap[ LOOP_INDEX ] );
-
-			// lighting
-
-			sLight = spotLight[ LOOP_INDEX ];
-
-			spotDirection = normalize(sLight.position - geo.position);
-			spotDistance = length( sLight.position - geo.position );
-			spotAngleCos = dot( sLight.direction, spotDirection );
-			spotAttenuation = 0.0;
-
-			if( spotAngleCos > sLight.angle ) {
-
-				spotAttenuation = smoothstep( sLight.angle, sLight.angle + ( 1.0 - sLight.angle ) * sLight.blend, spotAngleCos );
-
-			}
-
-			light.direction = spotDirection;
-			light.color = sLight.color * spotAttenuation * pow( clamp( 1.0 - spotDistance / sLight.distance, 0.0, 1.0 ),  sLight.decay );
-
-			outColor += RE( geo, mat, light ) * shadow;
-
-		#pragma loop_end
-	
-	#endif
-	
-	outColor += mat.emission;
-
-	glFragOut0 = glFragOut1 = vec4( outColor, 1.0 );
+	glFragOut0 = glFragOut1 = vec4( outColor.xyz, 1.0 );
 	gl_FragDepth = 0.5;
 
 }

@@ -20,7 +20,7 @@ export class Chahan extends GLP.Entity {
 		-------------------------------*/
 
 		const sara = new Dish();
-		sara.position.set( 0.0, - 0.08, 0.0 );
+		sara.position.set( 0.0, - 0.02, 0.0 );
 		this.add( sara );
 
 		/*-------------------------------

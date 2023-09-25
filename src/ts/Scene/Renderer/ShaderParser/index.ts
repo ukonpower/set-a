@@ -2,6 +2,7 @@ import common from './shaderModules/common.module.glsl';
 import sdf from './shaderModules/sdf.module.glsl';
 import noise from './shaderModules/noise.module.glsl';
 import rotate from './shaderModules/rotate.module.glsl';
+import light_h from './shaderModules/light_h.module.glsl';
 import light from './shaderModules/light.module.glsl';
 import re from './shaderModules/re.module.glsl';
 import vert_h from './shaderModules/vert_h.module.glsl';
@@ -57,6 +58,7 @@ export const shaderInclude = ( shader: string ) => {
 		"sdf": sdf,
 		"rotate": rotate,
 		"noise": noise,
+		"light_h": light_h,
 		"light": light,
 		"re": re,
 		"vert_h": vert_h,
@@ -117,7 +119,6 @@ export const shaderParse = ( shader: string, defines?: Defines, lights?: Collect
 
 	shader = shaderInclude( shader );
 	shader = shaderInsertLights( shader, lights );
-
 	shader = shaderInsertDefines( shader, defines );
 	shader = shaderUnrollLoop( shader );
 	shader = shader.replace( /#define GLSLIFY .*\n/g, "" );

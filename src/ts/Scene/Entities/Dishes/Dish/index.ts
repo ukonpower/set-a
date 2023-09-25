@@ -11,7 +11,24 @@ export class Dish extends GLP.Entity {
 		const defines: any = {};
 		defines[ type ] = '';
 
-		this.addComponent( "geometry", new GLP.CylinderGeometry( 1.0, 1.0, 0.45, 8.0 ) );
+		let geo: GLP.Geometry | null = null;
+
+		if ( type == "CHAHAN" ) {
+
+			geo = new GLP.CylinderGeometry( 1.0, 1.0, 0.45, 8.0 );
+
+		} else if ( type == 'RAMEN' ) {
+
+			geo = new GLP.CylinderGeometry( 1.15, 0.5, 1.0, 32.0 );
+
+		}
+
+		if ( geo ) {
+
+			this.addComponent( "geometry", geo );
+
+		}
+
 		this.addComponent( "material", new GLP.Material( {
 			frag: safaFrag,
 			defines,

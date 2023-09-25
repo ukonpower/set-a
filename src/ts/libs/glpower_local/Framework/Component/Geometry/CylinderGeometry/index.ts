@@ -23,7 +23,7 @@ export class CylinderGeometry extends Geometry {
 
 					//side
 					const w = 1.0 - i / heightSegments;
-					const radius = ( 1.0 - w ) * radiusBottom + w * radiusTop;
+					const radius = ( 1.0 - w ) * radiusTop + w * radiusBottom;
 
 					const x = Math.cos( theta ) * radius;
 					const y = - ( height / 2 ) + ( height / heightSegments ) * i;

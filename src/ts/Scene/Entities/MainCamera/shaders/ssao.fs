@@ -1,6 +1,6 @@
 #include <common>
 #include <packing>
-#include <light>
+#include <light_h>
 #include <noise>
 
 // uniforms
@@ -33,9 +33,12 @@ void main( void ) {
 
 	vec3 rayPos = texture( uGbufferPos, vUv ).xyz;
 	vec4 rayViewPos = viewMatrix * vec4(rayPos, 1.0);
+	
+	vec4 depthRayPos = projectionMatrixInverse * vec4( vUv * 2.0 - 1.0, texture( uDepthTexture, vUv ).x * 2.0 - 1.0, 1.0 );
+	depthRayPos.xyz /=depthRayPos.w;
 
 	if( rayPos.x + rayPos.y + rayPos.z == 0.0 ) return;
-	if( length(rayPos - cameraPosition) > 100.0 ) return;
+	if( abs( rayViewPos.z - depthRayPos.z ) > 0.1 || length(rayPos - cameraPosition) > 100.0 ) return;
 
 	vec3 normal = texture( uGbufferNormal, vUv ).xyz;
 	float occlusion = 0.0;

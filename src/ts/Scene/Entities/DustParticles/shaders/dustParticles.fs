@@ -1,7 +1,7 @@
 #include <common>
 #include <packing>
 #include <frag_h>
-#include <light>
+#include <light_h>
 
 in float vAlpha;
 uniform vec3 cameraPosition;

@@ -1,6 +1,6 @@
 #include <common>
 #include <packing>
-#include <light>
+#include <light_h>
 
 // uniforms
 
