@@ -74,7 +74,7 @@ export class Ramen extends GLP.Entity {
 		-------------------------------*/
 
 		const menma = new GLP.Entity();
-		const menmaGeo = new GLP.CubeGeometry( 0.1, 0.4, 0.02, 1.0, 10.0, 1.0 );
+		const menmaGeo = new GLP.CubeGeometry( 0.15, 0.5, 0.02, 1.0, 10.0, 1.0 );
 		menmaGeo.setAttribute( 'rnd', new Float32Array( ( ()=>{
 
 			const num = 5;
@@ -95,7 +95,7 @@ export class Ramen extends GLP.Entity {
 			frag: ramenFrag,
 			defines: { 'MENMA': '' }
 		} ) );
-		menma.position.set( 0.4, 0.12, 0.0 );
+		menma.position.set( 0.45, 0.12, 0.0 );
 		menma.quaternion.setFromEuler( new GLP.Euler( 0.0, Math.PI / 2, 0.0 ) );
 		this.add( menma );
 
@@ -104,16 +104,83 @@ export class Ramen extends GLP.Entity {
 		-------------------------------*/
 
 		const tamago = new GLP.Entity();
-		tamago.addComponent( "geometry", new GLP.SphereGeometry( 0.2 ) );
+		tamago.addComponent( "geometry", new GLP.SphereGeometry( 0.25 ) );
 		tamago.addComponent( "material", new GLP.Material( {
 			vert: ramenVert,
 			frag: tamagoFrag,
 		} ) );
-		tamago.position.set( - .33, 0.18, 0.3 );
-		tamago.quaternion.setFromEuler( new GLP.Euler( - Math.PI / 2 * 0.2, - Math.PI / 2 * 0.3, 0.0 ), "YZX" );
+		tamago.position.set( 0.1, 0.18, 0.45 );
+		tamago.quaternion.setFromEuler( new GLP.Euler( - Math.PI / 2 * 0.1, Math.PI / 2 * 0.2, 0.0 ), "YZX" );
 
 		this.add( tamago );
 
+		/*-------------------------------
+			Chashu
+		-------------------------------*/
+
+		const chashu = new GLP.Entity();
+		const chashuGeo = new GLP.CylinderGeometry( 0.32, 0.32, 0.03, 18.0, 1.0 );
+		chashuGeo.setAttribute( 'rnd', new Float32Array( ( ()=>{
+
+			const num = 3;
+
+			const r: number[] = [];
+			for ( let j = 0; j < num; j ++ ) {
+
+				r.push( j / ( num - 1.0 ), Math.random(), Math.random(), Math.random() );
+
+			}
+
+			return r;
+
+		} )() ), 4, { instanceDivisor: 1 } );
+
+		chashu.addComponent( "geometry", chashuGeo );
+
+		chashu.addComponent( "material", new GLP.Material( {
+			vert: ramenVert,
+			frag: ramenFrag,
+			defines: { 'CHASHU': '' }
+		} ) );
+
+		chashu.position.set( - 0.1, 0.15, - 0.55 );
+		chashu.quaternion.setFromEuler( new GLP.Euler( 0.0, 0.2, 0.0 ) );
+
+		this.add( chashu );
+
+		/*-------------------------------
+			Nori
+		-------------------------------*/
+
+		const nori = new GLP.Entity();
+		const noriGeo = new GLP.CubeGeometry( 0.5, 0.8, 0.005, 10.0, 10.0 );
+		noriGeo.setAttribute( 'rnd', new Float32Array( ( ()=>{
+
+			const num = 3;
+
+			const r: number[] = [];
+			for ( let j = 0; j < num; j ++ ) {
+
+				r.push( j / ( num - 1.0 ), Math.random(), Math.random(), Math.random() );
+
+			}
+
+			return r;
+
+		} )() ), 4, { instanceDivisor: 1 } );
+
+		nori.addComponent( "geometry", noriGeo );
+
+		nori.addComponent( "material", new GLP.Material( {
+			vert: ramenVert,
+			frag: ramenFrag,
+			defines: { 'NORI': '' }
+		} ) );
+
+		nori.position.set( - 0.65, 0.2, 0.2 );
+		nori.quaternion.setFromEuler( new GLP.Euler( 0.0, 1.85, 0.0 ) );
+
+		this.add( nori );
 
 	}
 
