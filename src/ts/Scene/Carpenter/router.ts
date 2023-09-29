@@ -5,6 +5,7 @@ import { Floor } from '../Entities/Floor';
 import { Chopsticks } from '../Entities/Chopsticks';
 import { Chahan } from '../Entities/Dishes/Chahan';
 import { Ramen } from '../Entities/Dishes/Ramen';
+import { Renge } from '../Entities/Renge';
 
 export const router = ( node: GLP.BLidgeNode ) => {
 
@@ -29,6 +30,10 @@ export const router = ( node: GLP.BLidgeNode ) => {
 	} else if ( node.class == "Ramen" ) {
 
 		return new Ramen();
+
+	} else if ( node.class == "Renge" ) {
+
+		return new Renge();
 
 	}
 
