@@ -67,6 +67,8 @@ class App {
 
 			if ( gpuState ) {
 
+				return;
+
 				const memoryElm = document.createElement( 'div' );
 				memoryElm.classList.add( "dev" );
 				memoryElm.style.pointerEvents = "none";
@@ -121,7 +123,7 @@ class App {
 	private resize() {
 
 		const aspect = 16 / 7;
-		const scale = 1.0;
+		const scale = 0.5;
 
 		this.canvas.width = 1920 * scale;
 		this.canvas.height = this.canvas.width / aspect;

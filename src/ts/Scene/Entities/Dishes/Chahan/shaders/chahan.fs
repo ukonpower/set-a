@@ -50,13 +50,13 @@ void main( void ) {
 
 		outColor = mix( vec4( 1.0, 0.1, 0.3, 1.0 ), vec4( 0.5, 0.0, 0.0 , 1.0 ), abs(vUv.x - 0.5) * 2.0 );
 
-		outEmission += (1.0 - dnv) * vec3( 1.0, 0.3, 0.1 ) * 0.5;
+		outSS += (1.0 - dnv) * vec3( 1.0, 0.3, 0.1 ) * 0.5;
 		outRoughness = 0.3;
 		outNormal += n.xyz * 0.5;
 
 	#else
 		
-		outEmission += (1.0 - dnv) * vec3( 1.0, 0.6, 0.0 ) * 0.5;
+		outSS += (1.0 - dnv) * vec3( 1.0, 0.6, 0.0 ) * 0.3;
 		outRoughness *= 0.1;
 
 	#endif

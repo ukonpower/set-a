@@ -39,6 +39,7 @@ LightCamera lightCamera;
 	float spotDistance;
 	float spotAngleCos;
 	float spotAttenuation;
+	vec3 radiance;
 
 	#pragma loop_start NUM_LIGHT_SPOT
 
@@ -64,12 +65,15 @@ LightCamera lightCamera;
 		light.direction = spotDirection;
 		light.color = sLight.color * spotAttenuation * pow( clamp( 1.0 - spotDistance / sLight.distance, 0.0, 1.0 ),  sLight.decay );
 
-		outColor.xyz += RE( geo, mat, light ) * shadow;
+		radiance = RE( geo, mat, light );
+		outColor.xyz += shadow * radiance;
+		outColor.xyz += mat.subsurface * light.color;
 
 	#pragma loop_end
 
 #endif
 
 outColor.xyz += mat.emission;
+// outColor.xyz = mat.subsurface;
 
 //]

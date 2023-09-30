@@ -49,11 +49,11 @@ float sdPyramid( vec3 p, float h)
   return sqrt( (d2+q.z*q.z)/m2 ) * sign(max(q.z,-p.y));
 }
 
-// float sdCappedCylinder( vec3 p, float h, float r )
-// {
-//   vec2 d = abs(vec2(length(p.xz),p.y)) - vec2(r,h);
-//   return min(max(d.x,d.y),0.0) + length(max(d,0.0));
-// }
+float sdCappedCylinder( vec3 p, float h, float r )
+{
+  vec2 d = abs(vec2(length(p.xz),p.y)) - vec2(r,h);
+  return min(max(d.x,d.y),0.0) + length(max(d,0.0));
+}
 
 float sdRoundedCylinder( vec3 p, float ra, float rb, float h )
 {

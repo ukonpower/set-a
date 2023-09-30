@@ -20,6 +20,7 @@ struct Material {
 	vec3 emission;
 	vec3 diffuseColor;
 	vec3 specularColor;
+	vec3 subsurface;
 };
 
 struct DirectionalLight {
@@ -107,4 +108,19 @@ vec4 floatToRGBA( float v ) {
 
 float rgbaToFloat( vec4 rgba ) {
 	return dot( rgba, vec4(1.0, 1.0/255.0, 1.0/65025.0, 1.0/16581375.0) );
+}
+
+float packColor(vec3 color) {
+	color.xyz *= 256.0;
+	color.xyz = floor( color.xyz );
+    return color.r + color.g * 256.0 + color.b * 256.0 * 256.0;
+}
+
+vec3 unpackColor(float f) {
+    vec3 color;
+    color.b = floor(f / 256.0 / 256.0);
+    color.g = floor((f - color.b * 256.0 * 256.0) / 256.0);
+    color.r = floor(f - color.b * 256.0 * 256.0 - color.g * 256.0);
+    // now we have a vec3 with the 3 components in range [0..255]. Let's normalize it!
+    return color / 255.0;
 }

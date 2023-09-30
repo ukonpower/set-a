@@ -1,4 +1,5 @@
 #include <common>
+
 #include <noise>
 
 in float offsetTime;
@@ -135,7 +136,7 @@ float kick( float time, float loop ) {
 	t -= 0.1 * exp( -70.0 * envTime );
 	t += 0.1;
 
-	o = ( smoothstep( -0.5, 0.5, sin( t * 190.0 ) ) * 2.0 - 1.0 ) * smoothstep( 1.0, 0.1, envTime );
+	float o = ( smoothstep( -0.5, 0.5, sin( t * 190.0 ) ) * 2.0 - 1.0 ) * smoothstep( 1.0, 0.1, envTime );
 	o *= 0.35;
 
     return o;
@@ -169,6 +170,7 @@ float moooon( float time, float loop ) {
 	float t = time;
 	t -= 1.0 * exp( -7.0 * envTime );
 
+	float o = 0.0;
 	o = ( smoothstep( -1.0, 1.0, sin( t * 200.0 ) ) * 2.0 - 1.0 ) * smoothstep( 1.0, 0.0, envTime );
 	o *= 0.35;
 
@@ -245,7 +247,6 @@ vec2 dada( float time, float loop ) {
 	for( int i = 0; i < 6; i ++ ) {
 
 		float fi = float( i ) / 6.0;
-		float scale = organCord[ index + 8 * i ];
 		float frec = s2f(4.0 + float(i) * 12.0 ) * pow( 0.5, 4.0 ); 
 
 		float v = saw( time * frec + ssin( w * 20.0 ) + TPI * fi ) * abs( pow( sin( w * TPI ), 3.0 ));
