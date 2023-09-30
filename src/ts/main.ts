@@ -123,7 +123,7 @@ class App {
 	private resize() {
 
 		const aspect = 16 / 7;
-		const scale = 0.5;
+		const scale = 1.0;
 
 		this.canvas.width = 1920 * scale;
 		this.canvas.height = this.canvas.width / aspect;

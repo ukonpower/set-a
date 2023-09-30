@@ -9,7 +9,7 @@ void main( void ) {
 
 	#include <frag_in>
 
-	float dnv = dot( vViewNormal, normalize( -vMVPosition ) );
+	float dnv = dot( normalize( vViewNormal ), normalize( -vMVPosition ) );
 	vec4 n = texture( uNoiseTex, vUv * 1.0 );
 	
 	#ifdef KOME
@@ -56,7 +56,7 @@ void main( void ) {
 
 	#else
 		
-		outSS += (1.0 - dnv) * vec3( 1.0, 0.6, 0.0 ) * 0.3;
+		outSS += ( 1.0 - dnv * 0.7 ) * vec3( 1.0, 0.6, 0.0 ) * 0.2;
 		outRoughness *= 0.1;
 
 	#endif

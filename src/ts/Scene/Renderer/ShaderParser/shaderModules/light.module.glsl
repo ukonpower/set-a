@@ -1,4 +1,4 @@
-//[
+ //[
 
 // outColor.xyz += 0.4;
 
@@ -74,6 +74,5 @@ LightCamera lightCamera;
 #endif
 
 outColor.xyz += mat.emission;
-// outColor.xyz = mat.subsurface;
 
 //]
