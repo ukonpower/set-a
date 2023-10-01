@@ -28,7 +28,7 @@ void main( void ) {
 	vec3 noisePosition = position.xyz * 0.6 + id * (0.5 + 0.1 * (1.0 - uParaState.x));
 	vec3 noise = fbm3( noisePosition + uTime ) - 0.45;
 
-	noise = noise * (0.002 + uParaState.x * 0.005);
+	noise = noise * (0.004 + uParaState.x * 0.002);
 	velocity.xyz *= 0.99;
 	velocity.xyz += noise; 
 
@@ -43,7 +43,7 @@ void main( void ) {
 	vec3 gPos = position.xyz + vec3( 0.0, -2.0 - 4.0 * ( 1.0 - uParaState.w ) , 0.0 );
 	gravity += gPos.xyz * smoothstep( 1.0, 3.0, length( gPos.xyz ) ) * -vec3(0.001, 0.005, 0.001) * ( 1.0 - smoothstep( 0.0, 1.0, -id + uParaState.x * 2.0 ) );
 
-	gPos = position.xyz + vec3( 0.0, -2.0, 0.0 );
+	gPos = position.xyz + vec3( 0.0, -3.0, 0.0 );
 	gravity += gPos.xyz * smoothstep( 1.0, 3.0, length( gPos.xyz ) ) * -vec3(0.01) * uParaState.x * (1.0 - uParaState.z);
 
 	gPos = position.xyz + vec3( 0.0, 0.0, 0.0 );
