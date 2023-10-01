@@ -137,7 +137,7 @@ float kick( float time, float loop ) {
 	t += 0.1;
 
 	float o = ( smoothstep( -0.5, 0.5, sin( t * 190.0 ) ) * 2.0 - 1.0 ) * smoothstep( 1.0, 0.1, envTime );
-	o *= 0.35;
+	o *= 0.25;
 
     return o;
 

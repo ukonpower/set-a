@@ -13,10 +13,11 @@ import { BLidgeNode } from "../BLidge";
 import { BLidger } from "../Component/BLidger";
 
 export type EntityUpdateEvent = {
-	time: number,
-	deltaTime: number,
-	matrix?: Matrix,
+	time: number;
+	deltaTime: number;
+	matrix?: Matrix;
 	renderStack?: RenderStack;
+	visibility?: boolean;
 }
 
 export type EntityResizeEvent = {
@@ -90,20 +91,6 @@ export class Entity extends EventEmitter {
 			gpuCompute: [],
 		};
 
-		if ( ! this.visible ) return event.renderStack;
-
-		const geometry = this.getComponent<Geometry>( 'geometry' );
-		const material = this.getComponent<Material>( 'material' );
-
-		if ( geometry && material ) {
-
-			if ( material.visibilityFlag.deferred ) event.renderStack.deferred.push( this );
-			if ( material.visibilityFlag.shadowMap ) event.renderStack.shadowMap.push( this );
-			if ( material.visibilityFlag.forward ) event.renderStack.forward.push( this );
-			if ( material.visibilityFlag.envMap ) event.renderStack.envMap.push( this );
-
-		}
-
 		const camera = this.getComponent<Camera>( 'camera' );
 
 		if ( camera ) {
@@ -132,6 +119,10 @@ export class Entity extends EventEmitter {
 
 		this.updateMatrix();
 
+		// update
+
+		this.preUpdate( event );
+
 		// components
 
 		const childEvent = { ...event } as ComponentUpdateEvent;
@@ -144,9 +135,28 @@ export class Entity extends EventEmitter {
 
 		} );
 
+		// update
+
 		this.updateImpl( event );
 
 		this.emit( "update", [ event ] );
+
+		// stack
+
+		const visibility = ( event.visibility || event.visibility === undefined ) && this.visible;
+		childEvent.visibility = visibility;
+
+		const geometry = this.getComponent<Geometry>( 'geometry' );
+		const material = this.getComponent<Material>( 'material' );
+
+		if ( geometry && material && visibility ) {
+
+			if ( material.visibilityFlag.deferred ) event.renderStack.deferred.push( this );
+			if ( material.visibilityFlag.shadowMap ) event.renderStack.shadowMap.push( this );
+			if ( material.visibilityFlag.forward ) event.renderStack.forward.push( this );
+			if ( material.visibilityFlag.envMap ) event.renderStack.envMap.push( this );
+
+		}
 
 		// children
 
@@ -158,6 +168,9 @@ export class Entity extends EventEmitter {
 
 		return event.renderStack;
 
+	}
+
+	protected preUpdate( event:EntityUpdateEvent ) {
 	}
 
 	protected updateImpl( event:EntityUpdateEvent ) {
@@ -269,7 +282,7 @@ export class Entity extends EventEmitter {
 
 		if ( name == "blidger" ) {
 
-			this.addBLidger( component as unknown as BLidger );
+			this.appendBlidger( component as unknown as BLidger );
 
 		}
 
@@ -297,15 +310,18 @@ export class Entity extends EventEmitter {
 		BLidger
 	-------------------------------*/
 
-	private addBLidger( blidger: BLidger ) {
+	private appendBlidger( blidger: BLidger ) {
 
 		this.blidgeNode = blidger.node;
 
-		this.addBlidgerImpl( blidger );
+		this.appendBlidgerImpl( blidger );
 
 	}
 
-	protected addBlidgerImpl( blidger: BLidger ) {
+	protected appendBlidgerImpl( blidger: BLidger ) {
+
+		this.emit( "appendBlidger", [ blidger ] );
+
 	}
 
 	/*-------------------------------

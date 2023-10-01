@@ -12,6 +12,7 @@ uniform mat4 modelMatrixInverse;
 vec2 D( vec3 p ) {
 
 	vec3 pp = p;
+	pp.y += 0.15;
 
 	vec2 d = vec2( 99999.0, 0.0 );
 
@@ -89,13 +90,9 @@ void main( void ) {
 		
 	}
 
-	if( dist.y == 0.0 ) {
-		
-		outRoughness = 0.1;
-		outMetalic = 0.0;
-		outColor.xyz = vec3( 1.0, 1.0, 1.0 );
-		
-	} 
+	outRoughness = 0.2;
+	outMetalic = 0.0;
+	outColor.xyz = vec3( 1.0, 1.0, 1.0 );
 
 	float dnv = dot( -rayDir, normal );
 	// outEmission += (1.0 - dnv) * vec3( 1.0, 0.6, 0.0 ) * 0.5;

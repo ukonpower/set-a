@@ -10,7 +10,7 @@ export class Skybox extends GLP.Entity {
 
 		super();
 
-		this.addComponent( "geometry", new GLP.SphereGeometry( 500.0 ) );
+		this.addComponent( "geometry", new GLP.SphereGeometry( 50.0, 50, 50 ) );
 
 		const mat = this.addComponent( "material", new GLP.Material( {
 			name: "skybox",

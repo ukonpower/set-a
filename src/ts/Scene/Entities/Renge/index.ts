@@ -12,7 +12,7 @@ export class Renge extends GLP.Entity {
 
 		// this.addComponent( "turntable", new TurnTable( 1.5 ) );
 
-		this.addComponent( "geometry", new GLP.CubeGeometry( 1.0, 3.0, 1.0 ) );
+		this.addComponent( "geometry", new GLP.CubeGeometry( 0.6, 2.25, 0.85 ) );
 		const mat = this.addComponent( "material", new GLP.Material( {
 			frag: hotGet( "rengeFrag", rengeFrag ),
 		} ) );

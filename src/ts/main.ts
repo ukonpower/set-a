@@ -106,15 +106,24 @@ class App {
 
 	}
 
+	private counter: boolean = true;
+
 	private animate() {
 
-		if ( gpuState ) {
+		if ( this.counter ) {
 
-			gpuState.update();
+
+			if ( gpuState ) {
+
+				gpuState.update();
+
+			}
+
+			this.scene.update();
 
 		}
 
-		this.scene.update();
+		// this.counter = ! this.counter;
 
 		window.requestAnimationFrame( this.animate.bind( this ) );
 

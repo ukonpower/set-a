@@ -151,13 +151,19 @@ export class Vector {
 
 	public length() {
 
-		return Math.sqrt( this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w );
+		return Math.sqrt( this.x * this.x + this.y * this.y + this.z * this.z );
 
 	}
 
 	public normalize() {
 
-		return this.divide( this.length() || 1 );
+		const length = this.length() || 1;
+
+		this.x /= length;
+		this.y /= length;
+		this.z /= length;
+
+		return this;
 
 	}
 

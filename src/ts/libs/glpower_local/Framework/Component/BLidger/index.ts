@@ -11,6 +11,7 @@ import { BLidge, BLidgeNode, BLidgeLightParam } from "../../BLidge";
 import { CylinderGeometry } from "../Geometry/CylinderGeometry";
 import { Geometry } from "../Geometry";
 import { PlaneGeometry } from "../Geometry/PlaneGeometry";
+import { UniformsUtils } from "../../../utils/Uniform";
 
 export class BLidger extends Component {
 
@@ -18,15 +19,15 @@ export class BLidger extends Component {
 
 	public node: BLidgeNode;
 
-	private rotationOffsetX: number;
+	public rotationOffsetX: number;
 
-	private curvePosition?: FCurveGroup;
-	private curveRotation?: FCurveGroup;
-	private curveScale?: FCurveGroup;
-	private curveHide?: FCurveGroup;
+	public curvePosition?: FCurveGroup;
+	public curveRotation?: FCurveGroup;
+	public curveScale?: FCurveGroup;
+	public curveHide?: FCurveGroup;
 
-	private uniforms: Uniforms;
-	private uniformCurves: {name: string, curve: FCurveGroup}[];
+	public uniforms: Uniforms;
+	public uniformCurves: {name: string, curve: FCurveGroup}[];
 
 	constructor( blidge: BLidge, node: BLidgeNode ) {
 
@@ -138,7 +139,13 @@ export class BLidger extends Component {
 
 			// base material
 
-			if ( entity.getComponent( "geometry" ) && ! entity.getComponent( "material" ) ) {
+			const mat = entity.getComponent<Material>( "material" );
+
+			if ( mat ) {
+
+				mat.uniforms = UniformsUtils.merge( mat.uniforms, this.uniforms );
+
+			} else if ( entity.getComponent( "geometry" ) ) {
 
 				entity.addComponent( "material", new Material( { name: entity.name, type: [ "deferred", "shadowMap" ] } ) );
 

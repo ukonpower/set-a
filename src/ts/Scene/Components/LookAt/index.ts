@@ -8,6 +8,8 @@ export class LookAt extends GLP.Component {
 	private entityWorldPos: GLP.Vector;
 	private targetWorldPos: GLP.Vector;
 
+	public enable: boolean;
+
 	constructor() {
 
 		super();
@@ -17,6 +19,8 @@ export class LookAt extends GLP.Component {
 		this.targetWorldPos = new GLP.Vector();
 		this.up = new GLP.Vector( 0.0, 1.0, 0.0 );
 
+		this.enable = true;
+
 	}
 
  	public setTarget( target: GLP.Entity | null ) {
@@ -25,33 +29,9 @@ export class LookAt extends GLP.Component {
 
 	}
 
-	protected setEntityImpl( entity: GLP.Entity | null ): void {
+	protected updateImpl( event: GLP.ComponentUpdateEvent ): void {
 
-		this.emit( "setEntity" );
-
-		const onUpdate = this.calcMatrix.bind( this );
-
-		if ( entity ) {
-
-			entity.on( 'notice/sceneTick', onUpdate );
-
-		}
-
-		this.once( "setEntity", () => {
-
-			if ( entity ) {
-
-				entity.off( 'notice/sceneTick', onUpdate );
-
-			}
-
-		} );
-
-	}
-
-	private calcMatrix() {
-
-		if ( this.entity && this.target ) {
+		if ( this.entity && this.target && this.enable ) {
 
 			this.entity.matrixWorld.decompose( this.entityWorldPos );
 			this.target.matrix.decompose( this.targetWorldPos );

@@ -4,7 +4,7 @@
 
 uniform vec3 cameraPosition;
 uniform sampler2D uNoiseTex;
-
+uniform vec4 uParaState;
 
 void main( void ) {
 
@@ -40,27 +40,10 @@ void main( void ) {
 
 	#endif
 
-	#ifdef DUMMY
-
-		outColor.xyz *= vec3( 1.0, 0.90, 0.7 );
-		outNormal += (texture( uNoiseTex, vUv.xy * 5.0 ).xyz - 0.5) * 2.0;
-
-	#endif
-
-	#ifdef SHOGA
-
-		outColor = mix( vec4( 1.0, 0.1, 0.3, 1.0 ), vec4( 0.5, 0.0, 0.0 , 1.0 ), abs(vUv.x - 0.5) * 2.0 );
-
-		outSS += (1.0 - dnv) * vec3( 1.0, 0.3, 0.1 ) * 0.5;
-		outRoughness = 0.3;
-		outNormal += n.xyz * 0.5;
-
-	#else
-		
-		outSS += ( 1.0 - dnv * 0.7 ) * vec3( 1.0, 0.6, 0.0 ) * 0.2;
-		outRoughness *= 0.1;
-
-	#endif
+	outColor.xyz = mix( vec3( 1.0 ), outColor.xyz, uParaState.y );
+	
+	outSS += ( 1.0 - dnv * 0.7 ) * vec3( 1.0, 0.6, 0.0 ) * 0.2 * uParaState.y;
+	outRoughness *= 0.1;
 	
 
 	#include <frag_out>

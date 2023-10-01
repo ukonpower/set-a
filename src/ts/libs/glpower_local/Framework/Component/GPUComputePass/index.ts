@@ -7,6 +7,7 @@ import { Vector } from '../../../Math/Vector';
 import { UniformsUtils } from '../../../utils/Uniform';
 import { gl } from '~/ts/Globals';
 import { GLPowerTexture } from '../../../GLPowerTexture';
+import { ComponentResizeEvent } from '..';
 
 export interface GPUComputePassParam extends Omit<PostProcessPassParam, 'renderTarget'>{
 	size: Vector,
@@ -100,6 +101,12 @@ export class GPUComputePass extends PostProcessPass {
 		}
 
 		gl.bindTexture( gl.TEXTURE_2D, null );
+
+	}
+
+	public resize( event: ComponentResizeEvent ): void {
+
+		//
 
 	}
 

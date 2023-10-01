@@ -3,7 +3,6 @@ import * as GLP from 'glpower';
 import chahanVert from './shaders/chahan.vs';
 import chahanFrag from './shaders/chahan.fs';
 
-import { TurnTable } from '~/ts/Scene/Components/TurnTable';
 import { globalUniforms } from '~/ts/Globals';
 import { Dish } from '../Dish';
 
@@ -13,7 +12,7 @@ export class Chahan extends GLP.Entity {
 
 		super();
 
-		this.addComponent( 'rotateview', new TurnTable( 1 ) );
+		// this.addComponent( 'rotateview', new TurnTable( 1 ) );
 
 		/*-------------------------------
 			Sara
@@ -112,9 +111,24 @@ export class Chahan extends GLP.Entity {
 			frag: chahanFrag,
 			defines: { 'SHOGA': '' }
 		} ) );
-		shoga.position.set( 0.67, 0.02, 0.0 );
+		shoga.position.set( 0.67, 0.04, 0.0 );
 		this.add( shoga );
 
+	}
+
+	protected appendBlidgerImpl( blidger: GLP.BLidger ): void {
+
+		this.children.forEach( c => {
+
+			const mat = c.getComponent<GLP.Material>( "material" );
+
+			if ( mat ) {
+
+				mat.uniforms = GLP.UniformsUtils.merge( mat.uniforms, blidger.uniforms );
+
+			}
+
+		} );
 
 	}
 

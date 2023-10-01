@@ -21,13 +21,13 @@ export class Dish extends GLP.Entity {
 
 			geo = new GLP.CylinderGeometry( 1.15, 0.5, 1.0, 32.0 );
 
-		}
+		} else {
 
-		if ( geo ) {
-
-			this.addComponent( "geometry", geo );
+			geo = new GLP.CylinderGeometry( 1.0, 1.0, 0.45, 8.0 );
 
 		}
+
+		this.addComponent( "geometry", geo );
 
 		this.addComponent( "material", new GLP.Material( {
 			frag: safaFrag,

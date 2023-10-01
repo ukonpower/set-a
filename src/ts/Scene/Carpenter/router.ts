@@ -6,12 +6,19 @@ import { Chopsticks } from '../Entities/Chopsticks';
 import { Chahan } from '../Entities/Dishes/Chahan';
 import { Ramen } from '../Entities/Dishes/Ramen';
 import { Renge } from '../Entities/Renge';
+import { Shoyu } from '../Entities/Shoyu';
+import { ChahanPara } from '../Entities/Dishes/ChahanPara';
+import { Skybox } from '../Entities/Skybox';
 
 export const router = ( node: GLP.BLidgeNode ) => {
 
 	// class
 
-	if ( node.class == "Dust" ) {
+	if ( node.class == "Skybox" ) {
+
+		return new Skybox();
+
+	} else if ( node.class == "Dust" ) {
 
 		return new DustParticles();
 
@@ -34,6 +41,14 @@ export const router = ( node: GLP.BLidgeNode ) => {
 	} else if ( node.class == "Renge" ) {
 
 		return new Renge();
+
+	} else if ( node.class == "Shoyu" ) {
+
+		return new Shoyu();
+
+	} else if ( node.class == "ChahanPara" ) {
+
+		return new ChahanPara();
 
 	}
 

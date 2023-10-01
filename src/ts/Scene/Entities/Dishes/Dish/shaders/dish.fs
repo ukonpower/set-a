@@ -4,15 +4,14 @@
 #include <sdf>
 #include <rotate>
 
-#ifdef RAMEN
+#define MARCH 64
 
-	#define MARCH 64
+#ifdef CHAHAN
 
-#else
-
-	#define MARCH 64
+	uniform vec4 uChState;
 
 #endif
+
 
 uniform vec3 cameraPosition;
 uniform mat4 modelMatrixInverse;
@@ -49,7 +48,7 @@ vec2 D( vec3 p ) {
 
 		pp.y -= -0.15 + ( 1.0 - pow( 1.0 - linearstep( 0.5, 1.0, length( pp.xz ) ), 2.0 ) ) * 0.3;
 		
-		d = add( d, vec2( opRound( sdBox( pp, vec3( 0.85, 0.015, 0.85 ) ), 0.01 ), 0.0 ) );
+		d = add( d, vec2( opRound( sdBox( pp, vec3( 0.85, 0.015, 0.85 ) * uChState.x ), 0.01 ), 0.0 ) );
 
 	#endif
 
@@ -63,6 +62,26 @@ vec2 D( vec3 p ) {
 		d = add( d, vec2( sdCappedCylinder( pp, h, r ), 0.0 ) );
 		d = sub( d, vec2( sdCappedCylinder( pp + vec3( 0.0, -0.1, 0.0 ), h, r * 0.95 ), 0.0 ) );
 		d = max( d, pp.y - h * 0.8 );
+
+	#endif
+
+	#ifdef SHOYU
+
+		float h = 0.02;
+		float r = 0.6;
+
+		float o = 0.5;
+		vec2 q = vec2( length(pp.xz) - o, pp.y );
+
+		vec2 q1 = q;
+		q1.xy *= rotate( -1.1 );
+		d = add( d, vec2( sdBox( vec3( q1, 0.0 ), vec3( 0.01, 0.2, 1.0 )), 0.0 ) );
+
+		vec2 q2 = q;
+		q2.x += 0.4;
+		q2.y += 0.11;
+		d = add( d, vec2( sdBox( vec3( q2, 0.0 ), vec3( 0.25, 0.04, 0.1  )), 0.0 ) );
+
 
 	#endif
 

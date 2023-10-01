@@ -13,6 +13,8 @@
 
 uniform sampler2D uNoiseTex;
 
+uniform vec4 uChState;
+
 void main( void ) {
 
 	#include <vert_in>
@@ -57,6 +59,9 @@ void main( void ) {
 		outPos *= rot;
 		outNormal *= rot;
 		
+		outPos *= uChState.y;
+		o *= uChState.y;
+		
 		outPos += o;
 
 	#endif
@@ -66,6 +71,8 @@ void main( void ) {
 		outPos *= 1.0 + ( texture( uNoiseTex, uv.xy * 1.0 ).xyz - 0.5 ) * 0.1;
 		outPos *= step( -0.05, outPos.y );
 	
+		outPos *= uChState.y;
+
 	#endif
 
 	#ifdef SHOGA
@@ -81,6 +88,8 @@ void main( void ) {
 
 		outPos.xyz += (rnd.xyz - 0.5) * 0.08;
 		outPos.y += 0.04;
+
+		outPos *= uChState.y;
 	
 	#endif
 	

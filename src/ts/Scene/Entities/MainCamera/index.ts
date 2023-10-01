@@ -28,6 +28,8 @@ export class MainCamera extends GLP.Entity {
 
 	private baseFov: number;
 
+	private lookAt: LookAt;
+
 	// fxaa
 
 	private fxaa: GLP.PostProcessPass;
@@ -107,7 +109,7 @@ export class MainCamera extends GLP.Entity {
 		this.cameraComponent = this.addComponent( "camera", new GLP.RenderCamera( param ) );
 		this.addComponent( 'orbitControls', new OrbitControls( canvas ) );
 
-		const lookAt = this.addComponent( 'lookAt', new LookAt() );
+		this.lookAt = this.addComponent( 'lookAt', new LookAt() );
 
 		this.addComponent( 'shakeViewer', new ShakeViewer( 0.3, 1.0 ) );
 		// this.addComponent( 'rotateViewer', new RotateViewer( 5.0 ) );
@@ -562,11 +564,11 @@ export class MainCamera extends GLP.Entity {
 				this.ssao,
 				this.ssComposite,
 				this.dofCoc,
-				// this.dofBokeh,
-				// this.dofComposite,
-				// this.motionBlurTile,
-				// this.motionBlurNeighbor,
-				// this.motionBlur,
+				this.dofBokeh,
+				this.dofComposite,
+				this.motionBlurTile,
+				this.motionBlurNeighbor,
+				this.motionBlur,
 				this.fxaa,
 				this.bloomBright,
 				...this.bloomBlur,
@@ -585,7 +587,7 @@ export class MainCamera extends GLP.Entity {
 
 		this.on( 'notice/sceneCreated', ( root: GLP.Entity ) => {
 
-			lookAt.setTarget( root.getEntityByName( "CameraTarget" ) || null );
+			this.lookAt.setTarget( root.getEntityByName( "CameraTarget" ) || null );
 			this.dofTarget = root.getEntityByName( 'CameraTargetDof' ) || null;
 
 			this.baseFov = this.cameraComponent.fov;
@@ -636,15 +638,29 @@ export class MainCamera extends GLP.Entity {
 
 	}
 
-	protected updateImpl( event: GLP.ComponentUpdateEvent ): void {
-
-		// fov
+	protected preUpdate( event: GLP.EntityUpdateEvent ): void {
 
 		if ( this.stateCurve ) {
 
-			const focalLength = this.stateCurve.setFrame( blidge.frame.current ).value.x;
+			// fov
 
-			const ff = 2 * Math.atan( 12 / ( 2 * focalLength ) ) / Math.PI * 180;
+			const state = this.stateCurve.setFrame( blidge.frame.current ).value;
+
+			this.lookAt.enable = state.y >= 1.0;
+
+		}
+
+	}
+
+	protected updateImpl( event: GLP.ComponentUpdateEvent ): void {
+
+		if ( this.stateCurve ) {
+
+			// fov
+
+			const state = this.stateCurve.value;
+
+			const ff = 2 * Math.atan( 12 / ( 2 * state.x ) ) / Math.PI * 180;
 			this.baseFov = ff;
 
 			this.updateCameraParams( this.resolution );
@@ -737,7 +753,7 @@ export class MainCamera extends GLP.Entity {
 
 	}
 
-	protected addBlidgerImpl( blidger: GLP.BLidger ): void {
+	protected appendBlidgerImpl( blidger: GLP.BLidger ): void {
 
 		const node = blidger.node;
 
