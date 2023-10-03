@@ -44,6 +44,16 @@ export class Component extends EventEmitter {
 
 	}
 
+	public preUpdate( event: ComponentUpdateEvent ) {
+
+		if ( this.entity ) {
+
+			this.preUpdateImpl( event );
+
+		}
+
+	}
+
 	public update( event: ComponentUpdateEvent ) {
 
 		if ( this.entity ) {
@@ -65,6 +75,8 @@ export class Component extends EventEmitter {
 	}
 
 	protected setEntityImpl( entity: Entity | null, prevEntity: Entity | null ) {}
+
+	protected preUpdateImpl( event: ComponentUpdateEvent ) {}
 
 	protected updateImpl( event: ComponentUpdateEvent ) {}
 

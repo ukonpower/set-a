@@ -15,11 +15,10 @@ export class LookAt extends GLP.Component {
 		super();
 
 		this.target = null;
+		this.enable = true;
 		this.entityWorldPos = new GLP.Vector();
 		this.targetWorldPos = new GLP.Vector();
 		this.up = new GLP.Vector( 0.0, 1.0, 0.0 );
-
-		this.enable = true;
 
 	}
 
@@ -29,7 +28,31 @@ export class LookAt extends GLP.Component {
 
 	}
 
-	protected updateImpl( event: GLP.ComponentUpdateEvent ): void {
+	protected setEntityImpl( entity: GLP.Entity | null ): void {
+
+		this.emit( "setEntity" );
+
+		const onUpdate = this.calcMatrix.bind( this );
+
+		if ( entity ) {
+
+			entity.on( 'notice/sceneTick', onUpdate );
+
+		}
+
+		this.once( "setEntity", () => {
+
+			if ( entity ) {
+
+				entity.off( 'notice/sceneTick', onUpdate );
+
+			}
+
+		} );
+
+	}
+
+	private calcMatrix() {
 
 		if ( this.entity && this.target && this.enable ) {
 

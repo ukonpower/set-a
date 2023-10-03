@@ -172,7 +172,7 @@ export class BLidger extends Component {
 
 	}
 
-	protected updateImpl( event: ComponentUpdateEvent ): void {
+	protected preUpdateImpl( event: ComponentUpdateEvent ): void {
 
 		const entity = event.entity;
 		const frame = this.blidge.frame.current;

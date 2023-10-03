@@ -79,6 +79,20 @@ export class Entity extends EventEmitter {
 		Update
 	-------------------------------*/
 
+	// before
+
+	protected beforeUpdate( event:EntityUpdateEvent, cEvent: ComponentUpdateEvent ) {
+
+		this.components.forEach( c => {
+
+			c.preUpdate( cEvent );
+
+		} );
+
+	}
+
+	// update
+
 	public update( event: EntityUpdateEvent ) {
 
 		if ( ! event.renderStack ) event.renderStack = {
@@ -121,21 +135,17 @@ export class Entity extends EventEmitter {
 
 		// update
 
-		this.preUpdate( event );
-
-		// components
-
 		const childEvent = { ...event } as ComponentUpdateEvent;
 		childEvent.entity = this;
 		childEvent.matrix = this.matrixWorld;
+
+		this.beforeUpdate( event, childEvent );
 
 		this.components.forEach( c => {
 
 			c.update( childEvent );
 
 		} );
-
-		// update
 
 		this.updateImpl( event );
 
@@ -168,9 +178,6 @@ export class Entity extends EventEmitter {
 
 		return event.renderStack;
 
-	}
-
-	protected preUpdate( event:EntityUpdateEvent ) {
 	}
 
 	protected updateImpl( event:EntityUpdateEvent ) {

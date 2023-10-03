@@ -107,11 +107,11 @@ export class MainCamera extends GLP.Entity {
 		// components
 
 		this.cameraComponent = this.addComponent( "camera", new GLP.RenderCamera( param ) );
-		this.addComponent( 'orbitControls', new OrbitControls( canvas ) );
+		// this.addComponent( 'orbitControls', new OrbitControls( canvas ) );
 
 		this.lookAt = this.addComponent( 'lookAt', new LookAt() );
 
-		this.addComponent( 'shakeViewer', new ShakeViewer( 0.3, 1.0 ) );
+		// this.addComponent( 'shakeViewer', new ShakeViewer( 0.3, 1.0 ) );
 		// this.addComponent( 'rotateViewer', new RotateViewer( 5.0 ) );
 
 		// resolution
@@ -463,7 +463,6 @@ export class MainCamera extends GLP.Entity {
 
 			this.bloomBlur.push( new GLP.PostProcessPass( {
 				name: 'bloom/blur/' + i + '/v',
-				// input: bloomInput,
 				renderTarget: rtVertical,
 				frag: bloomBlurFrag,
 				uniforms: {
@@ -559,19 +558,19 @@ export class MainCamera extends GLP.Entity {
 		if ( process.env.NODE_ENV == "development" && true ) {
 
 			passes = [
-				this.lightShaft,
-				this.ssr,
-				this.ssao,
-				this.ssComposite,
-				this.dofCoc,
-				this.dofBokeh,
-				this.dofComposite,
-				this.motionBlurTile,
-				this.motionBlurNeighbor,
-				this.motionBlur,
-				this.fxaa,
-				this.bloomBright,
-				...this.bloomBlur,
+				// this.lightShaft,
+				// this.ssr,
+				// this.ssao,
+				// this.ssComposite,
+				// this.dofCoc,
+				// this.dofBokeh,
+				// this.dofComposite,
+				// this.motionBlurTile,
+				// this.motionBlurNeighbor,
+				// this.motionBlur,
+				// this.fxaa,
+				// this.bloomBright,
+				// ...this.bloomBlur,
 				this.composite,
 			];
 
@@ -638,15 +637,20 @@ export class MainCamera extends GLP.Entity {
 
 	}
 
-	protected preUpdate( event: GLP.EntityUpdateEvent ): void {
+	protected beforeUpdate( event:GLP.EntityUpdateEvent, cEvent: GLP.ComponentUpdateEvent ): void {
+
+		super.beforeUpdate( event, cEvent );
 
 		if ( this.stateCurve ) {
 
-			// fov
-
 			const state = this.stateCurve.setFrame( blidge.frame.current ).value;
 
-			this.lookAt.enable = state.y >= 1.0;
+			this.lookAt.enable = state.y > 0.5;
+
+			const ff = 2 * Math.atan( 12 / ( 2 * state.x ) ) / Math.PI * 180;
+			this.baseFov = ff;
+
+			this.updateCameraParams( this.resolution );
 
 		}
 
@@ -660,10 +664,6 @@ export class MainCamera extends GLP.Entity {
 
 			const state = this.stateCurve.value;
 
-			const ff = 2 * Math.atan( 12 / ( 2 * state.x ) ) / Math.PI * 180;
-			this.baseFov = ff;
-
-			this.updateCameraParams( this.resolution );
 
 		}
 
