@@ -105,6 +105,61 @@ export class Entity extends EventEmitter {
 			gpuCompute: [],
 		};
 
+		const childEvent = { ...event } as ComponentUpdateEvent;
+		childEvent.entity = this;
+		childEvent.matrix = this.matrixWorld;
+
+		// pre update
+
+		this.preUpdateImpl( event );
+
+		this.components.forEach( c => {
+
+			c.preUpdate( childEvent );
+
+		} );
+
+		// update
+
+		this.updateImpl( event );
+
+		this.components.forEach( c => {
+
+			c.update( childEvent );
+
+		} );
+
+		// matrix
+
+		this.updateMatrix();
+
+		// after
+
+		this.afterUpdateImpl( event );
+
+		this.components.forEach( c => {
+
+			c.afterUpdate( childEvent );
+
+		} );
+
+		// stack
+
+		const visibility = ( event.visibility || event.visibility === undefined ) && this.visible;
+		childEvent.visibility = visibility;
+
+		const geometry = this.getComponent<Geometry>( 'geometry' );
+		const material = this.getComponent<Material>( 'material' );
+
+		if ( geometry && material && visibility ) {
+
+			if ( material.visibilityFlag.deferred ) event.renderStack.deferred.push( this );
+			if ( material.visibilityFlag.shadowMap ) event.renderStack.shadowMap.push( this );
+			if ( material.visibilityFlag.forward ) event.renderStack.forward.push( this );
+			if ( material.visibilityFlag.envMap ) event.renderStack.envMap.push( this );
+
+		}
+
 		const camera = this.getComponent<Camera>( 'camera' );
 
 		if ( camera ) {
@@ -129,45 +184,6 @@ export class Entity extends EventEmitter {
 
 		}
 
-		// matrix
-
-		this.updateMatrix();
-
-		// update
-
-		const childEvent = { ...event } as ComponentUpdateEvent;
-		childEvent.entity = this;
-		childEvent.matrix = this.matrixWorld;
-
-		this.beforeUpdate( event, childEvent );
-
-		this.components.forEach( c => {
-
-			c.update( childEvent );
-
-		} );
-
-		this.updateImpl( event );
-
-		this.emit( "update", [ event ] );
-
-		// stack
-
-		const visibility = ( event.visibility || event.visibility === undefined ) && this.visible;
-		childEvent.visibility = visibility;
-
-		const geometry = this.getComponent<Geometry>( 'geometry' );
-		const material = this.getComponent<Material>( 'material' );
-
-		if ( geometry && material && visibility ) {
-
-			if ( material.visibilityFlag.deferred ) event.renderStack.deferred.push( this );
-			if ( material.visibilityFlag.shadowMap ) event.renderStack.shadowMap.push( this );
-			if ( material.visibilityFlag.forward ) event.renderStack.forward.push( this );
-			if ( material.visibilityFlag.envMap ) event.renderStack.envMap.push( this );
-
-		}
-
 		// children
 
 		for ( let i = 0; i < this.children.length; i ++ ) {
@@ -180,7 +196,13 @@ export class Entity extends EventEmitter {
 
 	}
 
+	protected preUpdateImpl( event:EntityUpdateEvent ) {
+	}
+
 	protected updateImpl( event:EntityUpdateEvent ) {
+	}
+
+	protected afterUpdateImpl( event:EntityUpdateEvent ) {
 	}
 
 	/*-------------------------------
@@ -368,7 +390,6 @@ export class Entity extends EventEmitter {
 	public notice( eventName: string, opt?: any ) {
 
 		this.emit( "notice/" + eventName, [ opt ] );
-
 
 	}
 

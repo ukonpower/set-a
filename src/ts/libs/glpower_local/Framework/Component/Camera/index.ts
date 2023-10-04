@@ -91,46 +91,13 @@ export class Camera extends Component {
 
 	}
 
-	protected updateImpl( event: ComponentUpdateEvent ): void {
+	protected afterUpdateImpl( event: ComponentUpdateEvent ): void {
 
 		this.viewMatrixPrev.copy( this.viewMatrix );
 
 		this.viewMatrix.copy( event.entity.matrixWorld ).inverse();
 
 		this.projectionMatrixPrev.copy( this.projectionMatrix );
-
-
-
-		[
-			0, 1, 2, 3,
-			4, 5, 6, 7,
-			8, 9, 10, 11,
-			12, 13, 14, 15,
-		];
-
-		// // Left clipping plane
-		// this.frustum[ 0 ].x = elm[ 3 ] + elm[ 0 ];
-		// this.frustum[ 0 ].y = elm[ 7 ] + elm[ 4 ];
-		// this.frustum[ 0 ].z = elm[ 11 ] + elm[ 8 ];
-		// this.frustum[ 0 ].w = elm[ 15 ] + elm[ 12 ];
-		// // Right clipping plane
-		// this.frustum[ 1 ].x = elm[ 3 ] - elm[ 0 ];
-		// this.frustum[ 1 ].y = elm[ 7 ] - elm[ 4 ];
-		// this.frustum[ 1 ].z = elm[ 11 ] - elm[ 8 ];
-		// this.frustum[ 1 ].w = elm[ 15 ] - elm[ 12 ];
-		// // Top clipping plane
-		// this.frustum[ 2 ].x = elm[ 3 ] - elm[ 1 ];
-		// this.frustum[ 2 ].y = elm[ 7 ] - elm[ 5 ];
-		// this.frustum[ 2 ].z = elm[ 11 ] - elm[ 9 ];
-		// this.frustum[ 2 ].w = elm[ 15 ] - elm[ 13 ];
-		// // Bottom clipping plane
-		// this.frustum[ 3 ].x = elm[ 3 ] + elm[ 1 ];
-		// this.frustum[ 3 ].y = elm[ 7 ] + elm[ 5 ];
-		// this.frustum[ 3 ].z = elm[ 11 ] + elm[ 9 ];
-		// this.frustum[ 3 ].w = elm[ 15 ] + elm[ 13 ];
-
-		// console.log( this.frustum[ 0 ], this.frustum[ 0 ].length() );
-
 
 		if ( this.needsUpdate ) {
 

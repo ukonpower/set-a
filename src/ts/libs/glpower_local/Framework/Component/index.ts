@@ -64,6 +64,16 @@ export class Component extends EventEmitter {
 
 	}
 
+	public afterUpdate( event: ComponentUpdateEvent ) {
+
+		if ( this.entity ) {
+
+			this.afterUpdateImpl( event );
+
+		}
+
+	}
+
 	public resize( event: ComponentResizeEvent ) {
 
 		if ( this.entity ) {
@@ -79,6 +89,8 @@ export class Component extends EventEmitter {
 	protected preUpdateImpl( event: ComponentUpdateEvent ) {}
 
 	protected updateImpl( event: ComponentUpdateEvent ) {}
+
+	protected afterUpdateImpl( event: ComponentUpdateEvent ) {}
 
 	protected resizeImpl( event: ComponentResizeEvent ) {}
 

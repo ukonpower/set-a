@@ -36,7 +36,7 @@ export class LookAt extends GLP.Component {
 
 		if ( entity ) {
 
-			entity.on( 'notice/sceneTick', onUpdate );
+			entity.on( 'notice/finishUp', onUpdate );
 
 		}
 
@@ -44,7 +44,7 @@ export class LookAt extends GLP.Component {
 
 			if ( entity ) {
 
-				entity.off( 'notice/sceneTick', onUpdate );
+				entity.off( 'notice/finishUp', onUpdate );
 
 			}
 
@@ -57,7 +57,7 @@ export class LookAt extends GLP.Component {
 		if ( this.entity && this.target && this.enable ) {
 
 			this.entity.matrixWorld.decompose( this.entityWorldPos );
-			this.target.matrix.decompose( this.targetWorldPos );
+			this.target.matrixWorld.decompose( this.targetWorldPos );
 
 			this.entity.matrixWorld.lookAt( this.entityWorldPos, this.targetWorldPos, this.up );
 
