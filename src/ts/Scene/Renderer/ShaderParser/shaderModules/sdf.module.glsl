@@ -67,6 +67,21 @@ float sdOctahedron( vec3 p, float s)
   return (p.x+p.y+p.z-s)*0.57735027;
 }
 
+float sdVesicaSegment( in vec3 p, in vec3 a, in vec3 b, in float w )
+{
+    vec3  c = (a+b)*0.5;
+    float l = length(b-a);
+    vec3  v = (b-a)/l;
+    float y = dot(p-c,v);
+    vec2  q = vec2(length(p-c-y*v),abs(y));
+    
+    float r = 0.5*l;
+    float d = 0.5*(r*r-w*w)/w;
+    vec3  h = (r*q.x<d*(q.y-r)) ? vec3(0.0,r,0.0) : vec3(-d,0.0,d+w);
+ 
+    return length(q-h.xy) - h.z;
+}
+
 // operators
 
 vec2 add( vec2 d1, vec2 d2 ) {
@@ -78,7 +93,7 @@ vec2 sub( vec2 d1, vec2 d2 ) {
 	return d1.x < d2.x ? d2 : d1;
 }
 
-float opSmoothUnion( float d1, float d2, float k ) {
+float opSmoothAdd( float d1, float d2, float k ) {
   float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
   return mix( d2, d1, h ) - k*h*(1.0-h);
 }

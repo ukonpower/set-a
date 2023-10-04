@@ -37,7 +37,7 @@ vec2 D( vec3 p ) {
 
 	// gattai
 
-	float shape = opSmoothUnion( dBox, dSph, 0.1 );
+	float shape = opSmoothAdd( dBox, dSph, 0.1 );
 	d = add( d, vec2( shape, 1.0 ) );
 	d.x = opSmoothSubtraction( sdRoundedCylinder( pSph * vec3( 1.2, 1.0, 1.09) + vec3( 0.0, -0.15, 0.01), 0.18 - linearstep( 0.3, -0.3, pSph.y ) * 0.1, 0.05, 0.15 ), d.x, 0.04 );
 

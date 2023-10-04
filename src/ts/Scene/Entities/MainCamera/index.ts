@@ -107,9 +107,9 @@ export class MainCamera extends GLP.Entity {
 		// components
 
 		this.cameraComponent = this.addComponent( "camera", new GLP.RenderCamera( param ) );
-		// this.addComponent( 'orbitControls', new OrbitControls( canvas ) );
 
 		this.lookAt = this.addComponent( 'lookAt', new LookAt() );
+		this.addComponent( 'orbitControls', new OrbitControls( canvas ) );
 
 		// this.addComponent( 'shakeViewer', new ShakeViewer( 0.3, 1.0 ) );
 		// this.addComponent( 'rotateViewer', new RotateViewer( 5.0 ) );

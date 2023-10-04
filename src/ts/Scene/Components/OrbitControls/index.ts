@@ -49,7 +49,7 @@ export class OrbitControls extends GLP.Component {
 
 	}
 
-	protected updateImpl( event: GLP.ComponentUpdateEvent ): void {
+	protected afterUpdateImpl( event: GLP.ComponentUpdateEvent ): void {
 
 		const entity = event.entity;
 
