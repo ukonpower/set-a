@@ -17,8 +17,8 @@ in mat4 instanceMatrixInv;
 vec2 D( vec3 p ) {
 
 	p *= 0.9;
-	p.z += 0.05;
-	p.y += 0.05;
+
+	p += vec3( 0.0, 0.05, 0.05 ) * uState.w;
 
 	vec2 d = vec2( 99999.0, 0.0 );
 	vec3 pp = p;
@@ -38,10 +38,12 @@ vec2 D( vec3 p ) {
 	pq.z -= -0.05 + sin( abs( pq.x ) ) * 0.12;
 	vec3 p3 = vec3(m*pq.xz,pq.y);
 	p3.z *= 1.4;
-	d.x = opSmoothAdd( d.x, max( sdRoundedCylinder( p3, 0.2, 0.008, 0.005), -p.y ), 0.05 );
+	d.x = opSmoothAdd( d.x, max( sdRoundedCylinder( p3, 0.2, 0.008, 0.005 ), -p.y ), 0.05 );
 
 	d.x = opSmoothSubtraction( sdBox( pp + vec3( 0.0, 0.3, 0.0 ), vec3( 0.5, 0.2, 0.2 ) ), d.x, 0.03 );
 	d *= 0.6;
+
+	d.x = mix( sdSphere( pp, 0.15 ), d.x, uState.z );
 
 	return d;
 
@@ -88,7 +90,7 @@ void main( void ) {
 	float dnv = dot( -rayDir, normal );
 	outSS += (1.0 - dnv) * vec3( 1.0, 0.6, 0.0 ) * 0.2 * uState.y;
 		
-	outNormal = normalize(modelMatrix * vec4( normal, 0.0 )).xyz;
+	outNormal = normalize(modelMatrix * instanceMatrix * vec4( normal, 0.0 )).xyz;
 
 	if( !hit ) discard;
 

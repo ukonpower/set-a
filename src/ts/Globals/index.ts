@@ -19,6 +19,10 @@ export const globalUniforms: {[key: string]: GLP.Uniforms} = {
 			value: 0,
 			type: "1f"
 		},
+		uTimeSeqPrev: {
+			value: 0,
+			type: "1f"
+		},
 		uMove: {
 			value: 0,
 			type: "1f"

@@ -89,6 +89,8 @@ export class Scene extends GLP.EventEmitter {
 
 		globalUniforms.time.uTime.value = this.elapsedTime;
 		globalUniforms.time.uFractTime.value = this.elapsedTime % 1;
+		globalUniforms.time.uTimeSeqPrev.value = globalUniforms.time.uTimeSeq.value;
+		globalUniforms.time.uTimeSeq.value = blidge.frame.current / 30;
 
 		const event: GLP.EntityUpdateEvent = {
 			time: this.elapsedTime,

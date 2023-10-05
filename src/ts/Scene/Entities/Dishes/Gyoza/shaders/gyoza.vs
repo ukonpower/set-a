@@ -1,12 +1,15 @@
 #include <common>
 #include <vert_h>
 
-layout (location = 3) in float num;
+layout (location = 3) in vec2 num;
 
 out mat4 instanceMatrix;
 out mat4 instanceMatrixInv;
 
 uniform float uTime;
+uniform float uTimeSeq;
+uniform float uTimeSeqPrev;
+uniform vec4 uState;
 
 // https://github.com/glslify/glsl-inverse
 
@@ -51,19 +54,26 @@ mat4 inverse(mat4 m) {
       a20 * b03 - a21 * b01 + a22 * b00) / det;
 }
 
-void main( void ) {
-
-	#include <vert_in>
+mat4 getMat( float time ) {
 
 	vec3 move = vec3( 0.0 );
 
-	float t = uTime + num * TPI;
+	float t = time + num.y * TPI;
 	
-	move.x += sin( t );
-	move.z += cos( t );
+	vec3 posRot = vec3( 0.0 );
+	float r = min( uState.w, 1.0 );
+	posRot.x += sin( t ) * r;
+	posRot.z += cos( t ) * r;
 
-	float rotY = -t;
-	float rotX = -t * PI;
+	vec3 posAlign = vec3( 0.0 );
+	posAlign.x += ( num.x - 0.5 ) * 2.0;
+
+	float fin = smoothstep( 0.0, 1.0, -num.x + clamp( uState.w - 2.0, 0.0, 1.0 ) * 2.0 );
+	float rotY = mix( t, TPI * 7.0 + PI / 2.0, clamp( uState.w - 1.0, 0.0, 1.0 ) );
+	float rotX = fin * -PI;
+
+	move = mix( posRot, posAlign, clamp(uState.w, 1.0, 2.0 ) - 1.0 );
+	move.y -= fin * 0.15;
 
 	instanceMatrix = mat4(
 		1.0, 0.0, 0.0, 0.0,
@@ -82,14 +92,41 @@ void main( void ) {
 	instanceMatrix *= mat4(
 		1.0, 0.0, 0.0, 0.0,
 		0.0, cos( rotX ), - sin( rotX ), 0.0,
-		0.0, sin( rotX ), cos(rotX ), 0.0,
+		0.0, sin( rotX ), cos( rotX ), 0.0,
 		0.0, 0.0, 0.0, 1.0
 	);
 
+	return instanceMatrix;
+
+}
+
+void main( void ) {
+
+	#include <vert_in>
+
+	vec3 move = vec3( 0.0 );
+
+	mat4 currentMatrix = getMat( uTimeSeq );
+	instanceMatrix = currentMatrix;
 	instanceMatrixInv = inverse(instanceMatrix);
 
-	outPos.xyz = (instanceMatrix * vec4( outPos.xyz, 1.0 )).xyz;
+	mat4 prevMatrix = getMat( uTimeSeqPrev );
+	
+	vec4 modelPosition = modelMatrix * currentMatrix * vec4(outPos, 1.0);
+	vec4 mvPosition = viewMatrix * modelPosition;
+	gl_Position = projectionMatrix * mvPosition;
 
-	#include <vert_out>
+	vec4 modelPositionPrev = modelMatrixPrev * prevMatrix * vec4(outPos, 1.0);
+	vec4 mvPositionPrev = viewMatrixPrev * modelPositionPrev;
+	vec4 positionPrev = projectionMatrixPrev * mvPositionPrev;
+
+	vUv = outUv;
+	vViewNormal = (normalMatrix * vec4(outNormal, 0.0)).xyz;
+	vNormal = (modelMatrix * vec4(outNormal, 0.0)).xyz;
+	vPos = modelPosition.xyz;
+	vMVPosition = mvPosition.xyz;
+	vMVPPosition = gl_Position.xyz / gl_Position.w;
+
+	vVelocity = vMVPPosition.xy - positionPrev.xy / positionPrev.w;
 	
 }

@@ -19,7 +19,7 @@ export class Gyoza extends GLP.Entity {
 		const gyoza = new GLP.Entity();
 		const geo = gyoza.addComponent( "geometry", new GLP.SphereGeometry( 0.5 ) );
 
-		const num = 4;
+		const num = 5;
 
 		geo.setAttribute( 'num', new Float32Array( ( ()=>{
 
@@ -27,14 +27,14 @@ export class Gyoza extends GLP.Entity {
 
 			for ( let i = 0; i < num; i ++ ) {
 
-				r.push( i / num );
+				r.push( i / ( num - 1.0 ), i / ( num ) );
 
 
 			}
 
 			return r;
 
-		} )() ), 1, { instanceDivisor: 1 } );
+		} )() ), 2, { instanceDivisor: 1 } );
 
 		const gyozaMat = gyoza.addComponent( "material", new GLP.Material( {
 			vert: hotGet( "ghozaVert", gyozaVert ),
