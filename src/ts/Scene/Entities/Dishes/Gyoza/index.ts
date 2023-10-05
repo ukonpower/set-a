@@ -5,12 +5,21 @@ import gyozaFrag from './shaders/gyoza.fs';
 
 import { hotGet, hotUpdate } from '~/ts/libs/glpower_local/Framework/Utils/Hot';
 import { globalUniforms } from '~/ts/Globals';
+import { Dish } from '../Dish';
 
 export class Gyoza extends GLP.Entity {
 
 	constructor( ) {
 
 		super();
+
+		/*-------------------------------
+			Sara
+		-------------------------------*/
+
+		const sara = new Dish( "GYOZA" );
+		sara.position.set( 0.0, - 0.2, 0.0 );
+		this.add( sara );
 
 		/*-------------------------------
 			gyoza

@@ -11,6 +11,8 @@ uniform float uTimeSeq;
 uniform float uTimeSeqPrev;
 uniform vec4 uState;
 
+out float vFin;
+
 // https://github.com/glslify/glsl-inverse
 
 mat4 inverse(mat4 m) {
@@ -66,14 +68,17 @@ mat4 getMat( float time ) {
 	posRot.z += cos( t ) * r;
 
 	vec3 posAlign = vec3( 0.0 );
-	posAlign.x += ( num.x - 0.5 ) * 2.0;
+	posAlign.x += ( num.x - 0.5 ) * 1.5;
 
-	float fin = smoothstep( 0.0, 1.0, -num.x + clamp( uState.w - 2.0, 0.0, 1.0 ) * 2.0 );
+	float fin = smoothstep( 0.0, 1.0, -num.x * 0.5 + clamp( uState.w - 2.0, 0.0, 1.0 ) * 1.5 );
 	float rotY = mix( t, TPI * 7.0 + PI / 2.0, clamp( uState.w - 1.0, 0.0, 1.0 ) );
-	float rotX = fin * -PI;
+	float rotX = fin * (-PI - 0.2);
+
+	vFin = fin;
 
 	move = mix( posRot, posAlign, clamp(uState.w, 1.0, 2.0 ) - 1.0 );
 	move.y -= fin * 0.15;
+	move.x += fin * 0.15;
 
 	instanceMatrix = mat4(
 		1.0, 0.0, 0.0, 0.0,
@@ -106,12 +111,12 @@ void main( void ) {
 
 	vec3 move = vec3( 0.0 );
 
+	mat4 prevMatrix = getMat( uTimeSeqPrev );
+
 	mat4 currentMatrix = getMat( uTimeSeq );
 	instanceMatrix = currentMatrix;
 	instanceMatrixInv = inverse(instanceMatrix);
 
-	mat4 prevMatrix = getMat( uTimeSeqPrev );
-	
 	vec4 modelPosition = modelMatrix * currentMatrix * vec4(outPos, 1.0);
 	vec4 mvPosition = viewMatrix * modelPosition;
 	gl_Position = projectionMatrix * mvPosition;

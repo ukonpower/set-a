@@ -11,12 +11,15 @@ uniform mat4 modelMatrixInverse;
 
 uniform vec4 uState;
 
+in float vFin;
 in mat4 instanceMatrix;
 in mat4 instanceMatrixInv;
 
 vec2 D( vec3 p ) {
 
 	p *= 0.9;
+
+	p.y *= 1.0 + vFin * 0.2;
 
 	p += vec3( 0.0, 0.05, 0.05 ) * uState.w;
 

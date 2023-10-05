@@ -12,6 +12,11 @@
 
 #endif
 
+#ifdef GYOZA
+
+	uniform vec4 uState;
+
+#endif
 
 uniform vec3 cameraPosition;
 uniform mat4 modelMatrixInverse;
@@ -81,6 +86,30 @@ vec2 D( vec3 p ) {
 		q2.x += 0.4;
 		q2.y += 0.11;
 		d = add( d, vec2( sdBox( vec3( q2, 0.0 ), vec3( 0.25, 0.04, 0.1  )), 0.0 ) );
+
+
+	#endif
+
+	#ifdef GYOZA
+
+		pp *= 0.8;
+		pp.x *= 0.6;
+
+		float v = clamp(uState.w - 1.0, 0.0, 1.0 );
+
+		pp.y += ( 1.0 - v ) * 0.5;
+
+		float o = -0.3 + 0.8 * v;
+		vec2 q = vec2( length(pp.xz) - o, pp.y );
+
+		vec2 q1 = q;
+		q1.xy *= rotate( -1.1 );
+		d = add( d, vec2( sdBox( vec3( q1, 0.0 ), vec3( 0.01, 0.18, 1.0 )), 0.0 ) );
+
+		vec2 q2 = q;
+		q2.x += 0.4;
+		q2.y += 0.11;
+		d = add( d, vec2( sdBox( vec3( q2, 0.0 ), vec3( 0.3, 0.04, 0.1  )), 0.0 ) );
 
 
 	#endif
