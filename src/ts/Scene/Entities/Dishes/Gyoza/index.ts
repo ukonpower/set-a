@@ -48,7 +48,7 @@ export class Gyoza extends GLP.Entity {
 		const gyozaMat = gyoza.addComponent( "material", new GLP.Material( {
 			vert: hotGet( "ghozaVert", gyozaVert ),
 			frag: hotGet( "ghozaFrag", gyozaFrag ),
-			uniforms: GLP.UniformsUtils.merge( globalUniforms.time )
+			uniforms: GLP.UniformsUtils.merge( globalUniforms.time, globalUniforms.tex )
 		} ) );
 
 		this.add( gyoza );

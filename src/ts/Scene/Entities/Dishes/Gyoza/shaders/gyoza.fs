@@ -8,12 +8,14 @@
 
 uniform vec3 cameraPosition;
 uniform mat4 modelMatrixInverse;
+uniform sampler2D uNoiseTex;
 
 uniform vec4 uState;
 
 in float vFin;
 in mat4 instanceMatrix;
 in mat4 instanceMatrixInv;
+in vec2 vNum;
 
 vec2 D( vec3 p ) {
 
@@ -88,12 +90,23 @@ void main( void ) {
 		
 	}
 
-	outColor.xyz = mix( vec3( 1.0 ), vec3( 1.0, 1.0, 8.0 ), uState.y );
+	vec4 n = texture( uNoiseTex, rayPos.xz * 1.0 + vNum );
+
+	outColor.xyz = mix( vec3( 1.0 ), vec3( 1.0, 1.0, 0.8 ), clamp( uState.y, 0.0, 1.0 ) );
+	
+	vec3 yakeCol = mix( 
+		vec3( 1.0, 1.0, 0.8 ),
+		vec3( 0.1, 0.0, 0.0 ),
+		(0.4 + n.x * 0.6) *  smoothstep( -0.19, -0.23, rayPos.y - smoothstep( 0.4, 0.8, n.y ) * 0.025)
+	);
+	
+	outColor.xyz = mix( outColor.xyz, yakeCol, clamp(uState.y - 1.0, 0.0, 1.0 ) );
 
 	float dnv = dot( -rayDir, normal );
-	outSS += (1.0 - dnv) * vec3( 1.0, 0.6, 0.0 ) * 0.2 * uState.y;
+	outSS += (1.0 - dnv) * vec3( 1.0, 0.6, 0.0 ) * 0.05 * uState.y;
 		
 	outNormal = normalize(modelMatrix * instanceMatrix * vec4( normal, 0.0 )).xyz;
+	outRoughness = smoothstep( 0.2, 0.6, n.z );
 
 	if( !hit ) discard;
 

@@ -558,19 +558,19 @@ export class MainCamera extends GLP.Entity {
 		if ( process.env.NODE_ENV == "development" && true ) {
 
 			passes = [
-				this.lightShaft,
-				this.ssr,
-				this.ssao,
-				this.ssComposite,
-				this.dofCoc,
-				this.dofBokeh,
-				this.dofComposite,
-				this.motionBlurTile,
-				this.motionBlurNeighbor,
-				this.motionBlur,
-				this.fxaa,
-				this.bloomBright,
-				...this.bloomBlur,
+				// this.lightShaft,
+				// this.ssr,
+				// this.ssao,
+				// this.ssComposite,
+				// this.dofCoc,
+				// this.dofBokeh,
+				// this.dofComposite,
+				// this.motionBlurTile,
+				// this.motionBlurNeighbor,
+				// this.motionBlur,
+				// this.fxaa,
+				// this.bloomBright,
+				// ...this.bloomBlur,
 				this.composite,
 			];
 

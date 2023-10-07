@@ -1,4 +1,3 @@
-
 #include <common>
 #include <frag_h>
 #include <noise>
