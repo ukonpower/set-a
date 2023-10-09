@@ -10,6 +10,7 @@ import { Shoyu } from '../Entities/Shoyu';
 import { ChahanPara } from '../Entities/Dishes/ChahanPara';
 import { Skybox } from '../Entities/Skybox';
 import { Gyoza } from '../Entities/Dishes/Gyoza';
+import { Menu } from '../Entities/Menu';
 
 export const router = ( node: GLP.BLidgeNode ) => {
 
@@ -54,6 +55,10 @@ export const router = ( node: GLP.BLidgeNode ) => {
 	} else if ( node.class == "Gyoza" ) {
 
 		return new Gyoza();
+
+	} else if ( node.class == "Menu" ) {
+
+		return new Menu();
 
 	}
 
