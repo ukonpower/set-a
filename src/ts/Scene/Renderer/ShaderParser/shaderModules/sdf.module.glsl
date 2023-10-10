@@ -67,6 +67,13 @@ float sdOctahedron( vec3 p, float s)
   return (p.x+p.y+p.z-s)*0.57735027;
 }
 
+float sdCapsule( vec3 p, vec3 a, vec3 b, float r )
+{
+  vec3 pa = p - a, ba = b - a;
+  float h = clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );
+  return length( pa - ba*h ) - r;
+}
+
 float sdVesicaSegment( in vec3 p, in vec3 a, in vec3 b, in float w )
 {
     vec3  c = (a+b)*0.5;

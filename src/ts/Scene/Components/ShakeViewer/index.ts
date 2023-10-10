@@ -28,12 +28,7 @@ export class ShakeViewer extends GLP.Component {
 
 		if ( entity ) {
 
-			entity.on( 'notice/sceneTick', onUpdate );
-			this.cameraComponent = entity.getComponent( 'camera' );
-
-		} else {
-
-			this.cameraComponent = undefined;
+			entity.on( 'notice/finishUp', onUpdate );
 
 		}
 
@@ -41,17 +36,15 @@ export class ShakeViewer extends GLP.Component {
 
 			if ( entity ) {
 
-				entity.off( 'notice/sceneTick', onUpdate );
+				entity.off( 'notice/finishUp', onUpdate );
 
 			}
 
 		} );
 
-
 	}
 
-	private calcMatrix( event: GLP.EntityUpdateEvent ) {
-
+	private calcMatrix( event: GLP.ComponentUpdateEvent ) {
 
 		if ( this.entity ) {
 
@@ -68,7 +61,6 @@ export class ShakeViewer extends GLP.Component {
 			this.shakeQua.setFromEuler( { x: Math.sin( t * 2.0 ) * shake, y: Math.sin( t * 2.5 ) * shake, z: 0 } );
 
 			this.shakeMatrix.identity().applyQuaternion( this.shakeQua );
-
 
 			this.entity.matrixWorld.multiply( this.shakeMatrix );
 

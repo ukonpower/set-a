@@ -109,9 +109,8 @@ export class MainCamera extends GLP.Entity {
 		this.cameraComponent = this.addComponent( "camera", new GLP.RenderCamera( param ) );
 
 		this.lookAt = this.addComponent( 'lookAt', new LookAt() );
-		this.addComponent( 'orbitControls', new OrbitControls( canvas ) );
-
-		// this.addComponent( 'shakeViewer', new ShakeViewer( 0.3, 1.0 ) );
+		// this.addComponent( 'orbitControls', new OrbitControls( canvas ) );
+		this.addComponent( 'shakeViewer', new ShakeViewer( 0.3, 1.0 ) );
 		// this.addComponent( 'rotateViewer', new RotateViewer( 5.0 ) );
 
 		// resolution
@@ -558,19 +557,19 @@ export class MainCamera extends GLP.Entity {
 		if ( process.env.NODE_ENV == "development" && true ) {
 
 			passes = [
-				// this.lightShaft,
-				// this.ssr,
-				// this.ssao,
-				// this.ssComposite,
-				// this.dofCoc,
-				// this.dofBokeh,
-				// this.dofComposite,
-				// this.motionBlurTile,
-				// this.motionBlurNeighbor,
-				// this.motionBlur,
-				// this.fxaa,
-				// this.bloomBright,
-				// ...this.bloomBlur,
+				this.lightShaft,
+				this.ssr,
+				this.ssao,
+				this.ssComposite,
+				this.dofCoc,
+				this.dofBokeh,
+				this.dofComposite,
+				this.motionBlurTile,
+				this.motionBlurNeighbor,
+				this.motionBlur,
+				this.fxaa,
+				this.bloomBright,
+				...this.bloomBlur,
 				this.composite,
 			];
 
