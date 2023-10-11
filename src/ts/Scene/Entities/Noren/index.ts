@@ -3,7 +3,7 @@ import * as GLP from 'glpower';
 import norenVert from './shaders/noren.vs';
 import norenFrag from './shaders/noren.fs';
 import { hotGet, hotUpdate } from '~/ts/libs/glpower_local/Framework/Utils/Hot';
-import { globalUniforms } from '~/ts/Globals';
+import { gl, globalUniforms } from '~/ts/Globals';
 
 export class Noren extends GLP.Entity {
 
@@ -45,7 +45,7 @@ export class Noren extends GLP.Entity {
 			const r: number[] = [];
 			for ( let i = 0; i < num; i ++ ) {
 
-				r.push( i / ( num - 1.0 ), Math.random(), Math.random() );
+				r.push( i / ( num - 1.0 ), i / ( num ), Math.random() );
 
 			}
 
@@ -63,6 +63,27 @@ export class Noren extends GLP.Entity {
 		} ) );
 
 		this.add( hata );
+
+		// const canvas = document.createElement( "canvas" );
+		// canvas.width = 512;
+		// canvas.height = 128;
+
+		// const ctx = canvas.getContext( "2d" )!;
+		// ctx.fillStyle = "#F00";
+
+		// ctx.fillRect( 0, 0, canvas.width, canvas.height );
+
+		// ctx.fillStyle = "#FFF";
+
+		// ctx.font = `100px "UD デジタル 教科書体 NP-B"`;
+
+		// ctx.fillText( "ラーメン", 40, 105 );
+
+		// const texture = new GLP.GLPowerTexture( gl ).attach( canvas );
+		// mat.uniforms.uTex = {
+		// 	value: texture,
+		// 	type: '1i'
+		// };
 
 		if ( import.meta.hot ) {
 

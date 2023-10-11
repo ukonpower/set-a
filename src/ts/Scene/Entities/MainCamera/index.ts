@@ -578,8 +578,7 @@ export class MainCamera extends GLP.Entity {
 		this.addComponent( "postprocess", new GLP.PostProcess( {
 			input: param.renderTarget.forwardBuffer.textures,
 			passes
-		} )
-		);
+		} ) );
 
 		// events
 

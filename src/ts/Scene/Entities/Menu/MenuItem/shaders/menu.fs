@@ -3,7 +3,7 @@
 #include <frag_h>
 
 uniform sampler2D uTex;
-
+ 
 void main( void ) {
 
 	#include <frag_in>

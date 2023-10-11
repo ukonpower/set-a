@@ -1,5 +1,6 @@
 import * as GLP from 'glpower';
 import { MenuItem } from './MenuItem';
+import { blidge } from '~/ts/Globals';
 
 const list = [
 	"0b5vr",
@@ -36,6 +37,7 @@ const list = [
 export class Menu extends GLP.Entity {
 
 	private menuList: GLP.Entity[];
+	private curve: GLP.FCurveGroup | null;
 
 	constructor() {
 
@@ -45,9 +47,11 @@ export class Menu extends GLP.Entity {
 
 		list.forEach( ( item, i ) => {
 
-			const menu = new MenuItem( item, "99999" );
+			const menu = new MenuItem( item, "9999" );
 
 			menu.position.set( i * 0.4, 0, 0 );
+
+			menu.userData.rnd = Math.random();
 
 			this.add( menu );
 
@@ -55,10 +59,20 @@ export class Menu extends GLP.Entity {
 
 		} );
 
+		this.curve = null;
 
 	}
 
 	protected updateImpl( event: GLP.EntityUpdateEvent ): void {
+
+		let visible = 0;
+
+		if ( this.curve ) {
+
+			const value = this.curve.setFrame( blidge.frame.current ).value;
+			visible = value.x;
+
+		}
 
 		for ( let i = 0; i < this.menuList.length; i ++ ) {
 
@@ -66,19 +80,24 @@ export class Menu extends GLP.Entity {
 
 			const num = i / this.menuList.length;
 
-			const rad = num * Math.PI * 2.0;
-			const r = 3.0;
+			const xx = ( num + event.time * 0.08 ) % 1;
 
-			const x = - ( ( num + event.time * 0.08 ) % 1 - 0.5 ) * 10.0;
-			const z = 0;
+			const x = - ( xx - 0.5 ) * 10.0;
+			const z = Math.sin( xx * Math.PI ) * 0;
 
 			menu.position.set( x, 0, z );
+
+			menu.position.y += ( 1.0 - visible ) * ( 1.2 + menu.userData.rnd * 1.5 );
 
 		}
 
 	}
 
 	protected appendBlidgerImpl( blidger: GLP.BLidger ): void {
+
+		const node = blidger.node;
+
+		this.curve = blidge.getCurveGroup( node.animation.state )!;
 
 		this.children.forEach( c => {
 

@@ -385,7 +385,7 @@ vec2 music( float time ) {
 
 	}
 
-	if( isin( loop32Phase, 4.0, 7.0 ) ) {
+	if( isin( loop32Phase, 4.0, 6.0 ) ) {
 
 		o += clap1( time, loop16 / 2.0 );
 		o += kick1( time, loop16 / 2.0 );
@@ -394,14 +394,14 @@ vec2 music( float time ) {
 
 	}
 
-	if( isin( loop32Phase, 5.0, 7.0 ) ) {
+	if( isin( loop32Phase, 5.0, 6.0 ) ) {
 
 		o += xylophone1( time, loop16 * 4.0, 0.0 );
 		o += hihat1( time, loop16 );
 
 	}
 
-	if( isin( loop32Phase, 7.0, 8.0 ) ) {
+	if( isin( loop32Phase, 6.0, 7.0 ) ) {
 
 		o += xylophone1( time, loop16 * 4.0, 0.0 );
 		o += dada( time, loop8 / 4.0 );
