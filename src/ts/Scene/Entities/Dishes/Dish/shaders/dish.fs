@@ -68,6 +68,8 @@ vec2 D( vec3 p ) {
 		d = sub( d, vec2( sdCappedCylinder( pp + vec3( 0.0, -0.1, 0.0 ), h, r * 0.95 ), 0.0 ) );
 		d = max( d, pp.y - h * 0.8 );
 
+		d *= 0.9;
+
 	#endif
 
 	#ifdef SHOYU

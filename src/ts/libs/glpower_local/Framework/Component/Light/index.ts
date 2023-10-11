@@ -34,6 +34,10 @@ export class Light extends ShadowMapCamera {
 	public distance: number;
 	public decay: number;
 
+	// animation
+
+	private powerCurve: number;
+
 	constructor( param: LightParam ) {
 
 		param.far = param.far ?? 100;

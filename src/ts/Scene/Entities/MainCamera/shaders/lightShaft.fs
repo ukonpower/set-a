@@ -18,7 +18,7 @@ in vec2 vUv;
 
 layout (location = 0) out vec4 outColor;
 
-const float MARCH_LENGTH = 20.0;
+const float MARCH_LENGTH = 25.0;
 const float MARCH = 32.0;
 
 #include <noise>

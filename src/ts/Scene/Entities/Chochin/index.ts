@@ -10,7 +10,7 @@ export class Chochin extends GLP.Entity {
 
 		super();
 
-		const d = 2.0;
+		const d = 3.0;
 
 		const left = new GLP.Entity();
 		left.addComponent( "geometry", new GLP.SphereGeometry( 1.0 ) );

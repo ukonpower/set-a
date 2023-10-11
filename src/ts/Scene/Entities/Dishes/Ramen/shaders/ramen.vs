@@ -6,12 +6,12 @@
 	layout (location = 3) in vec4 rnd;
 #endif
 
-
 #ifdef NIKU
 	layout (location = 4) in float posY;
 #endif
 
 uniform sampler2D uNoiseTex;
+uniform vec4 uState;
 
 void main( void ) {
 
@@ -101,6 +101,8 @@ void main( void ) {
 		outPos.x += x * 0.45;
 
 	#endif
+
+	outPos *= uState.x;
 	
 	#include <vert_out>
 	

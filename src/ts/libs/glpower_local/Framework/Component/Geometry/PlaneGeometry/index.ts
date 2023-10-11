@@ -19,7 +19,7 @@ export class PlaneGeometry extends Geometry {
 			for ( let j = 0; j <= widthSegments; j ++ ) {
 
 				const x = ( j / widthSegments );
-				const y = ( i / widthSegments );
+				const y = ( i / heightSegments );
 
 				posArray.push(
 					- hx + width * x,

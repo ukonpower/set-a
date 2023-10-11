@@ -69,17 +69,17 @@ void main( void ) {
 
 	} else if( dist.y == 1.0 ) {
 
-		outColor.xyz = vec3( 0.0 );
-		outRoughness = 0.1;
+		outColor.xyz = vec3( 0.3 );
+		outRoughness = 0.15;
 		
 	}
 
 		
 	outNormal = normalize(modelMatrix * vec4( normal, 0.0 )).xyz;
 
-	// if( !hit ) discard;
+	if( !hit ) discard;
 
-	// outPos = ( modelMatrix * vec4( rayPos, 1.0 ) ).xyz;
+	outPos = ( modelMatrix * vec4( rayPos, 1.0 ) ).xyz;
 
 	#include <frag_out>
 

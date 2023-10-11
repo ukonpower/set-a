@@ -184,4 +184,20 @@ export class Ramen extends GLP.Entity {
 
 	}
 
+	protected appendBlidgerImpl( blidger: GLP.BLidger ): void {
+
+		this.children.forEach( c => {
+
+			const mat = c.getComponent<GLP.Material>( "material" );
+
+			if ( mat ) {
+
+				mat.uniforms = GLP.UniformsUtils.merge( mat.uniforms, blidger.uniforms );
+
+			}
+
+		} );
+
+	}
+
 }

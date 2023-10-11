@@ -83,18 +83,11 @@ export class MenuItem extends GLP.Entity {
 
 		ctx.fillText( price, 0, 0 );
 
-		canvas.style.position = "absolute";
-		canvas.style.left = "0";
-		canvas.style.top = "0";
-		document.body.appendChild( canvas );
-
-
 		const texture = new GLP.GLPowerTexture( gl ).attach( canvas );
 		mat.uniforms.uTex = {
 			value: texture,
 			type: '1i'
 		};
-
 
 	}
 
