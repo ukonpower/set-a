@@ -8,20 +8,24 @@
 
 uniform vec3 cameraPosition;
 uniform mat4 modelMatrixInverse;
+uniform vec4 uState;
+
 
 vec2 D( vec3 p ) {
+
+	float s = smoothstep( 0.5, 1.0, uState.x );
 
 	vec3 pp = p;
 	vec2 d = vec2( 99999.0, 0.0 );
 
 	pp.xy *= 1.3;
 
-	d = add( d, vec2( sdSphere( pp, 0.25 ), 0.0 ) );
+	d = add( d, vec2( sdSphere( pp, 0.25 * s ), 0.0 ) );
 
 	vec3 ppp = p + vec3( 0.0, 0.0, 0.03 );
 	
-	d = sub( d, vec2( sdSphere( ppp, 0.14 ), 1.0 ) );
-	d = add( d, vec2( sdSphere( ppp, 0.14 ), 1.0 ) );
+	d = sub( d, vec2( sdSphere( ppp, 0.14 * s ), 1.0 ) );
+	d = add( d, vec2( sdSphere( ppp, 0.14 * s ), 1.0 ) );
 
 	d = max( d, pp.y );
 

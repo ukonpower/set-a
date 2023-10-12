@@ -3,7 +3,7 @@ import * as GLP from 'glpower';
 import norenVert from './shaders/noren.vs';
 import norenFrag from './shaders/noren.fs';
 import { hotGet, hotUpdate } from '~/ts/libs/glpower_local/Framework/Utils/Hot';
-import { gl, globalUniforms } from '~/ts/Globals';
+import { globalUniforms } from '~/ts/Globals';
 
 export class Noren extends GLP.Entity {
 
@@ -19,7 +19,7 @@ export class Noren extends GLP.Entity {
 
 		const bou = new GLP.Entity();
 
-		bou.addComponent( 'geometry', new GLP.CylinderGeometry( 0.025, 0.025, 10.0 ) );
+		bou.addComponent( 'geometry', new GLP.CylinderGeometry( 0.025, 0.025, 10.0, 10, 8 ) );
 		const matBou = bou.addComponent( 'material', new GLP.Material( {
 			vert: hotGet( 'norenVert', norenVert ),
 			frag: hotGet( 'norenFrag', norenFrag ),
@@ -54,6 +54,7 @@ export class Noren extends GLP.Entity {
 		} )() ), 3, { instanceDivisor: 1 } );
 
 		hata.addComponent( 'geometry', hataGeo );
+
 		const mat = hata.addComponent( 'material', new GLP.Material( {
 			vert: hotGet( 'norenVert', norenVert ),
 			frag: hotGet( 'norenFrag', norenFrag ),

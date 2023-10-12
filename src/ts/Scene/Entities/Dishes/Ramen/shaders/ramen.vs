@@ -102,7 +102,13 @@ void main( void ) {
 
 	#endif
 
-	outPos *= uState.x;
+
+	#if defined( NEGI ) || defined( MENMA ) || defined( CHASHU ) || defined( NORI )
+
+		outPos.y += easeIn( linearstep( 1.0, 0.0, - rnd.x + uState.x * 2.0 ), 5.0 ) * 5.0;
+		
+	#endif
+
 	
 	#include <vert_out>
 	

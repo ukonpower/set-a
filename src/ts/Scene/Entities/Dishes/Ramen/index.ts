@@ -108,6 +108,7 @@ export class Ramen extends GLP.Entity {
 		tamago.addComponent( "material", new GLP.Material( {
 			vert: ramenVert,
 			frag: tamagoFrag,
+			defines: { 'TAMAGO': '' }
 		} ) );
 		tamago.position.set( 0.1, 0.18, 0.45 );
 		tamago.quaternion.setFromEuler( new GLP.Euler( - Math.PI / 2 * 0.1, Math.PI / 2 * 0.2, 0.0 ), "YZX" );

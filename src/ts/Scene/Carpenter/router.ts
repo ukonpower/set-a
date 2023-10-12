@@ -13,6 +13,7 @@ import { Gyoza } from '../Entities/Dishes/Gyoza';
 import { Menu } from '../Entities/Menu';
 import { Chochin } from '../Entities/Chochin';
 import { Noren } from '../Entities/Noren';
+import { Men } from '../Entities/Dishes/Men';
 
 export const router = ( node: GLP.BLidgeNode ) => {
 
@@ -69,6 +70,10 @@ export const router = ( node: GLP.BLidgeNode ) => {
 	} else if ( node.class == "Noren" ) {
 
 		return new Noren();
+
+	} else if ( node.class == "Men" ) {
+
+		return new Men();
 
 	}
 
