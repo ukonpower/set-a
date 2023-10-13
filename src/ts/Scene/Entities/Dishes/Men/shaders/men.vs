@@ -52,6 +52,7 @@ void main( void ) {
 	outNormal *= rot;
 
 	outPos += offsetPosition;
+	// outPos.xyz *= smoothstep( 0.0, 0.1, 1.0 - uState.y );
 
 	vId = id;
 

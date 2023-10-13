@@ -15,7 +15,7 @@ export class Men extends GLP.Entity {
 
 		super();
 
-		const count = new GLP.Vector( 32, 256 );
+		const count = new GLP.Vector( 64, 256 );
 
 		// gpu
 

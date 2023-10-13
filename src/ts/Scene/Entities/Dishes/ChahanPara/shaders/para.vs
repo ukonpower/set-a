@@ -23,10 +23,6 @@ void main( void ) {
 	vec4 gpuPos = texture(gpuSampler0, computeUV );
 	vec4 gpuVel = texture(gpuSampler1, computeUV );
 
-	// outPos *= ( 0.05 + rnd.z * rnd.z ) * 1.5 ;
-	// outPos *= smoothstep( 1.0, 0.9, gpuPos.w);
-	// outPos *= smoothstep( 0.1, 0.15, gpuPos.w);
-
 	#ifdef KOME
 
 		outPos.x += cos( outPos.y * 20.0 ) * 0.01;
@@ -43,7 +39,6 @@ void main( void ) {
 
 	#ifdef NIKU
 
-		// outPos.x += sin( outPos.y * 100.0 ) * 0.005;
 		outPos.xz *= rotate( posY * 0.3 );
 		outNormal = normalize( outNormal + texture( uNoiseTex, uv.xy * 1.0 ).xyz * 2.0 );
 	
@@ -63,7 +58,5 @@ void main( void ) {
 
 	vec4 vel = ( projectionMatrix * viewMatrix * modelMatrix * vec4( gpuVel.xyz, 0.0 ) );
 	vVelocity += vel.xy * 0.05;
-
-	// gl_PointSize = 10.0;
 	
 }

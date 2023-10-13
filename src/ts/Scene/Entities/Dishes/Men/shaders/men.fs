@@ -5,6 +5,8 @@
 uniform vec3 cameraPosition;
 uniform sampler2D uNoiseTex;
 
+uniform vec4 uState;
+
 void main( void ) {
 
 	#include <frag_in>
@@ -17,6 +19,10 @@ void main( void ) {
 	
 	outEmission += ( 1.0 - dnv * 0.7 ) * vec3( 1.0, 0.6, 0.0 ) * 1.9;
 	outRoughness *= 0.1;
+
+	if( vUv.y > 1.0 - uState.y ) {
+		discard;
+	}
 	
 	#include <frag_out>
 
