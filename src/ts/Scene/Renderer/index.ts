@@ -1,6 +1,6 @@
 import * as GLP from 'glpower';
 
-import { gl, gpuState, power } from "~/ts/Globals";
+import { gl, power } from "~/ts/Globals";
 import { ProgramManager } from "./ProgramManager";
 import { shaderParse } from "./ShaderParser";
 import { DeferredPostProcess } from './DeferredPostProcess';
@@ -139,51 +139,51 @@ export class Renderer extends GLP.Entity {
 
 	public render( stack: RenderStack ) {
 
-		if ( process.env.NODE_ENV == 'development' ) {
+		// if ( process.env.NODE_ENV == 'development' ) {
 
-			const disjoint = gl.getParameter( power.extDisJointTimerQuery.GPU_DISJOINT_EXT );
+		// 	const disjoint = gl.getParameter( power.extDisJointTimerQuery.GPU_DISJOINT_EXT );
 
-			if ( disjoint ) {
+		// 	if ( disjoint ) {
 
-				this.queryList.forEach( q => gl.deleteQuery( q ) );
+		// 		this.queryList.forEach( q => gl.deleteQuery( q ) );
 
-				this.queryList.length = 0;
+		// 		this.queryList.length = 0;
 
-			} else {
+		// 	} else {
 
-				if ( this.queryListQueued.length > 0 ) {
+		// 		if ( this.queryListQueued.length > 0 ) {
 
-					const l = this.queryListQueued.length;
+		// 			const l = this.queryListQueued.length;
 
-					for ( let i = l - 1; i >= 0; i -- ) {
+		// 			for ( let i = l - 1; i >= 0; i -- ) {
 
-						const q = this.queryListQueued[ i ];
+		// 				const q = this.queryListQueued[ i ];
 
-						const resultAvailable = gl.getQueryParameter( q.query, gl.QUERY_RESULT_AVAILABLE );
+		// 				const resultAvailable = gl.getQueryParameter( q.query, gl.QUERY_RESULT_AVAILABLE );
 
-						if ( resultAvailable ) {
+		// 				if ( resultAvailable ) {
 
-							const result = gl.getQueryParameter( q.query, gl.QUERY_RESULT );
+		// 					const result = gl.getQueryParameter( q.query, gl.QUERY_RESULT );
 
-							this.queryList.push( q.query );
+		// 					this.queryList.push( q.query );
 
-							this.queryListQueued.splice( i, 1 );
+		// 					this.queryListQueued.splice( i, 1 );
 
-							if ( gpuState ) {
+		// 					if ( gpuState ) {
 
-								gpuState.setRenderTime( q.name, result / 1000 / 1000 );
+		// 						gpuState.setRenderTime( q.name, result / 1000 / 1000 );
 
-							}
+		// 					}
 
-						}
+		// 				}
 
-					}
+		// 			}
 
-				}
+		// 		}
 
-			}
+		// 	}
 
-		}
+		// }
 
 		// light
 
@@ -364,11 +364,7 @@ export class Renderer extends GLP.Entity {
 			drawParam.modelMatrixWorld = entity.matrixWorld;
 			drawParam.modelMatrixWorldPrev = entity.matrixWorldPrev;
 
-			if ( camera.checkFrustum( entity ) ) {
-
-				this.draw( entity.uuid.toString(), renderType, geometry, material, drawParam );
-
-			}
+			this.draw( entity.uuid.toString(), renderType, geometry, material, drawParam );
 
 		}
 

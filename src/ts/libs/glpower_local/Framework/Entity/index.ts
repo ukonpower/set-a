@@ -18,6 +18,7 @@ export type EntityUpdateEvent = {
 	matrix?: Matrix;
 	renderStack?: RenderStack;
 	visibility?: boolean;
+	forceDraw?: boolean
 }
 
 export type EntityResizeEvent = {
@@ -151,7 +152,7 @@ export class Entity extends EventEmitter {
 		const geometry = this.getComponent<Geometry>( 'geometry' );
 		const material = this.getComponent<Material>( 'material' );
 
-		if ( geometry && material && visibility ) {
+		if ( geometry && material && ( visibility || event.forceDraw ) ) {
 
 			if ( material.visibilityFlag.deferred ) event.renderStack.deferred.push( this );
 			if ( material.visibilityFlag.shadowMap ) event.renderStack.shadowMap.push( this );

@@ -2,11 +2,11 @@ import * as GLP from 'glpower';
 
 import ramenVert from './shaders/ramen.vs';
 import ramenFrag from './shaders/ramen.fs';
-
 import tamagoFrag from './shaders/tamago.fs';
 
 import { TurnTable } from '~/ts/Scene/Components/TurnTable';
 import { Dish } from '../Dish';
+import { globalUniforms } from '~/ts/Globals';
 
 export class Ramen extends GLP.Entity {
 
@@ -15,6 +15,8 @@ export class Ramen extends GLP.Entity {
 		super();
 
 		this.addComponent( 'rotateview', new TurnTable( 1 ) );
+
+		const uniforms = GLP.UniformsUtils.merge( globalUniforms.tex );
 
 		/*-------------------------------
 			Sara
@@ -34,7 +36,8 @@ export class Ramen extends GLP.Entity {
 			vert: ramenVert,
 			frag: ramenFrag,
 			type: [ "forward" ],
-			defines: { 'SOUP': '' }
+			defines: { 'SOUP': '' },
+			uniforms,
 		} ) );
 		soup.position.set( 0.0, 0.0, 0.0 );
 		this.add( soup );
@@ -64,7 +67,8 @@ export class Ramen extends GLP.Entity {
 			vert: ramenVert,
 			frag: ramenFrag,
 			cullFace: false,
-			defines: { 'NEGI': '' }
+			defines: { 'NEGI': '' },
+			uniforms,
 		} ) );
 		negi.position.set( 0.0, 0.1, 0.0 );
 		this.add( negi );
@@ -93,7 +97,8 @@ export class Ramen extends GLP.Entity {
 		menma.addComponent( "material", new GLP.Material( {
 			vert: ramenVert,
 			frag: ramenFrag,
-			defines: { 'MENMA': '' }
+			defines: { 'MENMA': '' },
+			uniforms,
 		} ) );
 		menma.position.set( 0.45, 0.12, 0.0 );
 		menma.quaternion.setFromEuler( new GLP.Euler( 0.0, Math.PI / 2, 0.0 ) );
@@ -108,7 +113,8 @@ export class Ramen extends GLP.Entity {
 		tamago.addComponent( "material", new GLP.Material( {
 			vert: ramenVert,
 			frag: tamagoFrag,
-			defines: { 'TAMAGO': '' }
+			defines: { 'TAMAGO': '' },
+			uniforms,
 		} ) );
 		tamago.position.set( 0.1, 0.18, 0.45 );
 		tamago.quaternion.setFromEuler( new GLP.Euler( - Math.PI / 2 * 0.1, Math.PI / 2 * 0.2, 0.0 ), "YZX" );
@@ -137,11 +143,11 @@ export class Ramen extends GLP.Entity {
 		} )() ), 4, { instanceDivisor: 1 } );
 
 		chashu.addComponent( "geometry", chashuGeo );
-
 		chashu.addComponent( "material", new GLP.Material( {
 			vert: ramenVert,
 			frag: ramenFrag,
-			defines: { 'CHASHU': '' }
+			defines: { 'CHASHU': '' },
+			uniforms,
 		} ) );
 
 		chashu.position.set( - 0.1, 0.15, - 0.55 );
@@ -171,11 +177,11 @@ export class Ramen extends GLP.Entity {
 		} )() ), 4, { instanceDivisor: 1 } );
 
 		nori.addComponent( "geometry", noriGeo );
-
 		nori.addComponent( "material", new GLP.Material( {
 			vert: ramenVert,
 			frag: ramenFrag,
-			defines: { 'NORI': '' }
+			defines: { 'NORI': '' },
+			uniforms,
 		} ) );
 
 		nori.position.set( - 0.65, 0.2, 0.2 );

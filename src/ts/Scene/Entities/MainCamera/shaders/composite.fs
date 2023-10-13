@@ -6,6 +6,7 @@ uniform sampler2D uBloomTexture[4];
 uniform vec3 cameraPosition;
 uniform float cameraNear;
 uniform float cameraFar;
+uniform float uVisible;
 
 in vec2 vUv;
 
@@ -48,6 +49,8 @@ void main( void ) {
 	#pragma loop_end
 
 	col *= smoothstep( 1.0, 0.4, len );
+
+	col.xyz *= uVisible;
 
 	outColor = vec4( col, 1.0 );
 

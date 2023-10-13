@@ -1,6 +1,6 @@
 import * as GLP from 'glpower';
 
-import { blidge, canvas, gl, globalUniforms, power } from "~/ts/Globals";
+import { blidge, gl, globalUniforms, power } from "~/ts/Globals";
 import { LookAt } from '../../Components/LookAt';
 
 import fxaaFrag from './shaders/fxaa.fs';
@@ -17,7 +17,6 @@ import motionBlurNeighborFrag from './shaders/motionBlurNeighbor.fs';
 import motionBlurFrag from './shaders/motionBlur.fs';
 import ssCompositeFrag from './shaders/ssComposite.fs';
 import compositeFrag from './shaders/composite.fs';
-import { OrbitControls } from '../../Components/OrbitControls';
 import { ShakeViewer } from '../../Components/ShakeViewer';
 
 export class MainCamera extends GLP.Entity {
@@ -530,6 +529,10 @@ export class MainCamera extends GLP.Entity {
 					value: this.rtBloomHorizonal.map( rt => rt.textures[ 0 ] ),
 					type: '1iv'
 				},
+				uVisible: {
+					value: 0,
+					type: "1f"
+				}
 			} ),
 			defines: {
 				BLOOM_COUNT: this.bloomRenderCount.toString()
@@ -537,26 +540,10 @@ export class MainCamera extends GLP.Entity {
 			renderTarget: null
 		} );
 
-		let passes = [
-			this.lightShaft,
-			this.ssr,
-			this.ssao,
-			this.ssComposite,
-			this.dofCoc,
-			this.dofBokeh,
-			this.dofComposite,
-			this.motionBlurTile,
-			this.motionBlurNeighbor,
-			this.motionBlur,
-			this.fxaa,
-			this.bloomBright,
-			...this.bloomBlur,
-			this.composite,
-		];
 
-		if ( process.env.NODE_ENV == "development" && true ) {
-
-			passes = [
+		this.addComponent( "postprocess", new GLP.PostProcess( {
+			input: param.renderTarget.forwardBuffer.textures,
+			passes: [
 				this.lightShaft,
 				this.ssr,
 				this.ssao,
@@ -571,13 +558,7 @@ export class MainCamera extends GLP.Entity {
 				this.bloomBright,
 				...this.bloomBlur,
 				this.composite,
-			];
-
-		}
-
-		this.addComponent( "postprocess", new GLP.PostProcess( {
-			input: param.renderTarget.forwardBuffer.textures,
-			passes
+			]
 		} ) );
 
 		// events
@@ -636,18 +617,24 @@ export class MainCamera extends GLP.Entity {
 
 	protected updateImpl( event: GLP.ComponentUpdateEvent ): void {
 
-		// this.updateMatrix();
-
 		if ( this.stateCurve ) {
 
 			const state = this.stateCurve.setFrame( blidge.frame.current ).value;
 
+			// lookat
+
 			this.lookAt.enable = state.y > 0.5;
+
+			//  fov
 
 			const ff = 2 * Math.atan( 12 / ( 2 * state.x ) ) / Math.PI * 180;
 			this.baseFov = ff;
 
 			this.updateCameraParams( this.resolution );
+
+			// visible
+
+			this.composite.uniforms.uVisible.value = state.z;
 
 		}
 

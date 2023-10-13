@@ -7,6 +7,10 @@ import { Renderer } from './Renderer';
 import { createTextures } from './Textures';
 
 
+type SceneUpdateParam = {
+	forceDraw: boolean
+}
+
 export class Scene extends GLP.EventEmitter {
 
 	private currentTime: number;
@@ -71,6 +75,12 @@ export class Scene extends GLP.EventEmitter {
 
 		this.carpenter = new Carpenter( this.root, this.camera );
 
+		this.carpenter.on( "loaded", () => {
+
+			this.emit( "loaded" );
+
+		} );
+
 		// renderer
 
 		this.renderer = new Renderer();
@@ -78,14 +88,12 @@ export class Scene extends GLP.EventEmitter {
 
 	}
 
-	public update() {
+	public update( param?: SceneUpdateParam ) {
 
 		const currentTime = new Date().getTime();
 		this.deltaTime = ( currentTime - this.currentTime ) / 1000;
 		this.elapsedTime += this.deltaTime;
 		this.currentTime = currentTime;
-
-		// blidge.frame.current = this.elapsedTime * 30 % blidge.frame.end;
 
 		globalUniforms.time.uTime.value = this.elapsedTime;
 		globalUniforms.time.uFractTime.value = this.elapsedTime % 1;
@@ -95,6 +103,7 @@ export class Scene extends GLP.EventEmitter {
 		const event: GLP.EntityUpdateEvent = {
 			time: this.elapsedTime,
 			deltaTime: this.deltaTime,
+			forceDraw: param && param.forceDraw
 		};
 
 		const renderStack = this.root.update( event );
@@ -102,6 +111,8 @@ export class Scene extends GLP.EventEmitter {
 		this.root.noticeRecursive( "finishUp", event );
 
 		this.renderer.render( renderStack );
+
+		return this.deltaTime;
 
 	}
 

@@ -1,7 +1,5 @@
 import { Component, ComponentUpdateEvent } from "..";
 import { Matrix } from "../../../Math/Matrix";
-import { Vector } from "../../../Math/Vector";
-import { Entity } from "../../Entity";
 
 export type CameraType = 'perspective' | 'orthographic'
 export interface CameraParam {
@@ -33,8 +31,6 @@ export class Camera extends Component {
 
 	public needsUpdate: boolean;
 
-	public frustum: Vector[];
-
 	constructor( param: CameraParam ) {
 
 		super();
@@ -58,16 +54,6 @@ export class Camera extends Component {
 
 		this.orthWidth = param.orthWidth || 1;
 		this.orthHeight = param.orthHeight || 1;
-
-		this.frustum = [
-			new Vector(),
-			new Vector(),
-			new Vector(),
-			new Vector(),
-			new Vector(),
-			new Vector(),
-			new Vector(),
-		];
 
 		this.needsUpdate = true;
 
@@ -104,54 +90,6 @@ export class Camera extends Component {
 			this.updateProjectionMatrix();
 
 		}
-
-	}
-
-	public checkFrustum( entity: Entity ) {
-
-		const comboMatrix = this.projectionMatrix.clone().multiply( entity.matrixWorld.clone().multiply( this.viewMatrix ) );
-		const elm = comboMatrix.elm;
-
-		[
-			0, 4, 8, 12,
-			1, 5, 9, 13,
-			2, 6, 10, 14,
-			3, 7, 11, 15,
-		];
-
-		// https://stackoverflow.com/questions/12836967/extracting-view-frustum-planes-gribb-hartmann-method
-
-		this.frustum[ 0 ].x = elm[ 12 ] + elm[ 0 ];
-		this.frustum[ 0 ].y = elm[ 13 ] + elm[ 1 ];
-		this.frustum[ 0 ].z = elm[ 14 ] + elm[ 2 ];
-		this.frustum[ 0 ].w = elm[ 15 ] + elm[ 3 ];
-		// Right clipping plane
-		this.frustum[ 1 ].x = elm[ 12 ] - elm[ 0 ];
-		this.frustum[ 1 ].y = elm[ 13 ] - elm[ 1 ];
-		this.frustum[ 1 ].z = elm[ 14 ] - elm[ 2 ];
-		this.frustum[ 1 ].w = elm[ 15 ] - elm[ 3 ];
-		// Top clipping plane
-		this.frustum[ 2 ].x = elm[ 12 ] - elm[ 4 ];
-		this.frustum[ 2 ].y = elm[ 13 ] - elm[ 5 ];
-		this.frustum[ 2 ].z = elm[ 14 ] - elm[ 6 ];
-		this.frustum[ 2 ].w = elm[ 15 ] - elm[ 7 ];
-		// Bottom clipping plane
-		this.frustum[ 3 ].x = elm[ 12 ] + elm[ 4 ];
-		this.frustum[ 3 ].y = elm[ 13 ] + elm[ 5 ];
-		this.frustum[ 3 ].z = elm[ 14 ] + elm[ 6 ];
-		this.frustum[ 3 ].w = elm[ 15 ] + elm[ 7 ];
-
-		for ( let i = 0; i < 4; i ++ ) {
-
-			// var dist = dot3( world_space_point.xyz, p_planes[ i ].xyz ) + p_planes[ i ].d + sphere_radius;
-
-			const dist = this.frustum[ 1 ].dot( new Vector().applyMatrix4( entity.matrixWorld ) );
-
-			if ( dist < 0 ) return false; // sphere culled
-
-		}
-
-		return true;
 
 	}
 

@@ -15,6 +15,10 @@ export class Carpenter extends GLP.EventEmitter {
 	private playing: boolean;
 	private playTime: number;
 
+	//  status
+
+	private firstLoaded: boolean = false;
+
 	constructor( root: GLP.Entity, camera: GLP.Entity ) {
 
 		super();
@@ -132,6 +136,16 @@ export class Carpenter extends GLP.EventEmitter {
 		if ( this.blidgeRoot ) {
 
 			this.blidgeRoot.noticeRecursive( "sceneCreated", this.blidgeRoot );
+
+		}
+
+		// first load
+
+		if ( ! this.firstLoaded ) {
+
+			this.emit( "loaded" );
+
+			this.firstLoaded = true;
 
 		}
 
