@@ -102,4 +102,10 @@ export class Men extends GLP.Entity {
 
 	}
 
+	protected appendBlidgerImpl( blidger: GLP.BLidger ): void {
+
+		this.gpu.uniforms = GLP.UniformsUtils.merge( this.gpu.uniforms, blidger.uniforms );
+
+	}
+
 }

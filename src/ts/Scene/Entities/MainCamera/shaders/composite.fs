@@ -31,7 +31,7 @@ void main( void ) {
 	vec2 uv = vUv;
 	vec2 cuv = uv - 0.5;
 	float len = length(cuv);
-	float w = 0.035;
+	float w = 0.04;
 
 	float d;
 	#pragma loop_start 8

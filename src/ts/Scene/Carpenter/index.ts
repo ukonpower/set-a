@@ -38,24 +38,25 @@ export class Carpenter extends GLP.EventEmitter {
 
 		blidge.on( 'sync/scene', this.onSyncScene.bind( this ) );
 
-		blidge.on( 'sync/timeline', ( frame: GLP.BLidgeFrame ) => {
-		} );
+		queueMicrotask( () => {
 
-		if ( process.env.NODE_ENV == "development" ) {
+			if ( process.env.NODE_ENV == "development" ) {
 
-			blidge.connect( 'ws://localhost:3100' );
+				blidge.connect( 'ws://localhost:3100' );
 
-			blidge.on( 'error', () => {
+				blidge.on( 'error', () => {
+
+					blidge.loadScene( SceneData as any );
+
+				} );
+
+			} else {
 
 				blidge.loadScene( SceneData as any );
 
-			} );
+			}
 
-		} else {
-
-			blidge.loadScene( SceneData as any );
-
-		}
+		} );
 
 	}
 

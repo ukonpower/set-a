@@ -19,7 +19,7 @@ export class Noren extends GLP.Entity {
 
 		const bou = new GLP.Entity();
 
-		bou.addComponent( 'geometry', new GLP.CylinderGeometry( 0.025, 0.025, 10.0, 10, 8 ) );
+		bou.addComponent( 'geometry', new GLP.CylinderGeometry( 0.03, 0.03, 10.0, 10, 8 ) );
 		const matBou = bou.addComponent( 'material', new GLP.Material( {
 			vert: hotGet( 'norenVert', norenVert ),
 			frag: hotGet( 'norenFrag', norenFrag ),
@@ -37,7 +37,7 @@ export class Noren extends GLP.Entity {
 		-------------------------------*/
 
 		const hata = new GLP.Entity();
-		const hataGeo = new GLP.PlaneGeometry( 1.0, 1.25, 1.0, 20.0 );
+		const hataGeo = new GLP.PlaneGeometry( 1.0, height, 1.0, 20.0 );
 		hataGeo.setAttribute( 'id', new Float32Array( ( ()=>{
 
 			const num = 5;

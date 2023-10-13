@@ -6,7 +6,6 @@ import { MainCamera } from './Entities/MainCamera';
 import { Renderer } from './Renderer';
 import { createTextures } from './Textures';
 
-
 type SceneUpdateParam = {
 	forceDraw: boolean
 }
@@ -100,6 +99,12 @@ export class Scene extends GLP.EventEmitter {
 		globalUniforms.time.uTimeSeqPrev.value = globalUniforms.time.uTimeSeq.value;
 		globalUniforms.time.uTimeSeq.value = blidge.frame.current / 30;
 
+		if ( process.env.NODE_ENV != "development" ) {
+
+			blidge.setFrame( this.elapsedTime * 30 );
+
+		}
+
 		const event: GLP.EntityUpdateEvent = {
 			time: this.elapsedTime,
 			deltaTime: this.deltaTime,
@@ -126,7 +131,11 @@ export class Scene extends GLP.EventEmitter {
 
 	}
 
-	public play() {
+	public play( startTime: number ) {
+
+		this.update();
+
+		this.elapsedTime = startTime;
 
 		this.emit( 'play' );
 

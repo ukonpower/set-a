@@ -1,5 +1,5 @@
 import * as GLP from 'glpower';
-import { blidge, canvas } from './Globals';
+import { blidge, canvas, gpuState } from './Globals';
 import { Scene } from "./Scene";
 import { Music } from './Music';
 
@@ -15,7 +15,11 @@ class App {
 	private scene: Scene;
 	private music: Music;
 
+	private playing: boolean;
+
 	constructor() {
+
+		this.playing = false;
 
 		/*-------------------------------
 			Element
@@ -130,11 +134,52 @@ class App {
 
 		this.resize();
 
+		// gpustate
+
+		if ( process.env.NODE_ENV == 'development' ) {
+
+			if ( gpuState ) {
+
+				const memoryElm = document.createElement( 'div' );
+				memoryElm.classList.add( "dev" );
+				memoryElm.style.pointerEvents = "none";
+				memoryElm.style.position = "absolute";
+				memoryElm.style.width = "50%";
+				memoryElm.style.maxWidth = "300px";
+				memoryElm.style.height = "100%";
+				memoryElm.style.top = '0';
+				memoryElm.style.left = "0";
+				memoryElm.style.overflowY = 'auto';
+				memoryElm.style.fontSize = "12px";
+				memoryElm.style.color = "#fff";
+				this.canvasWrapElm.appendChild( memoryElm );
+
+				const timerElm = document.createElement( 'div' );
+				timerElm.classList.add( "dev" );
+				timerElm.style.pointerEvents = "none";
+				timerElm.style.position = "absolute";
+				timerElm.style.maxWidth = "300px";
+				timerElm.style.width = "50%";
+				timerElm.style.height = "100%";
+				timerElm.style.top = "0";
+				timerElm.style.right = "0";
+				timerElm.style.overflowY = 'auto';
+				timerElm.style.fontSize = "12px";
+				this.canvasWrapElm.appendChild( timerElm );
+
+				this.canvasWrapElm.style.fontFamily = "'Share Tech Mono', monospace";
+
+				gpuState.init( memoryElm, timerElm );
+
+			}
+
+		}
+
 	}
 
 	private animate() {
 
-		const deltaTime = this.scene.update();
+		this.scene.update();
 
 		window.requestAnimationFrame( this.animate.bind( this ) );
 
@@ -148,7 +193,14 @@ class App {
 
 		this.resize();
 
-		this.scene.play();
+		if ( process.env.NODE_ENV != "development" ) {
+
+			const start = 4;
+
+			this.music.play( start );
+			this.scene.play( start );
+
+		}
 
 		this.animate();
 

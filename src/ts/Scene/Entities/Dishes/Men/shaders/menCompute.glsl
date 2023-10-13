@@ -9,7 +9,7 @@ uniform sampler2D gpuSampler1;
 uniform float uTime;
 uniform vec2 uGPUResolution;
 
-uniform vec4 uParaState;
+uniform vec4 uState;
 
 in vec2 vUv;
 
@@ -27,7 +27,7 @@ void main( void ) {
 
 	float head = vUv.x < pixel.x ? 1.0 : 0.0;
 
-	vec3 noisePosition = position.xyz * ( 0.21 + ( 1.0 - head ) * 0.15 ) + id * 0.2;
+	vec3 noisePosition = position.xyz * ( 0.21 + ( 1.0 - head ) * 0.15 + 1.0 * (1.0 - uState.x) ) + id * 0.2;
 	vec3 noise = fbm3( noisePosition + uTime * ( 0.1 + head * 0.9 ) ) - 0.45;
 
 	if( vUv.x < pixel.x ) {
@@ -46,7 +46,7 @@ void main( void ) {
 
 		vec3 gravity = vec3( 0.00001 );
 
-		vec3 gPos = position.xyz + vec3( 0.0, -3.0, 0.0 );
+		vec3 gPos = position.xyz + vec3( 0.0, -4.0 + ( -8.0 * ( 1.0 - uState.x )), 0.0 );
 		gravity += gPos.xyz * smoothstep( 1.0, 4.0, length( gPos.xyz ) ) * -vec3(0.003, 0.01, 0.003);
 
 		velocity.xyz += gravity;

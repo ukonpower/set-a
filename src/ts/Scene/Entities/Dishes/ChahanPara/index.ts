@@ -36,9 +36,7 @@ export class ChahanPara extends GLP.Entity {
 
 				return [ 0, 0, 0, Math.random() ];
 
-			}
-
-			{
+			} else {
 
 				return [ 0, 0, 0, Math.random() ];
 
@@ -149,7 +147,6 @@ export class ChahanPara extends GLP.Entity {
 
 
 		}
-
 
 	}
 
