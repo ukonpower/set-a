@@ -5,31 +5,100 @@ import { Music } from './Music';
 
 class App {
 
+
+	// elms
+	private rootElm: HTMLElement;
+	private canvasWrapElm: HTMLElement;
 	private canvas: HTMLCanvasElement;
-	private canvasWrap: HTMLElement;
 
 	private scene: Scene;
 	private music: Music;
 
 	constructor() {
 
-		const elm = document.createElement( "div" );
-		document.body.appendChild( elm );
-		elm.innerHTML = `
-			<style>body{color:#FFF;margin:0;background:#000;display:flex;justify-content:center;align-items:center;}</style>
-			<div class="cw"></div>
+		document.body.innerHTML = `
+		<style>
+			body{margin:0;}
+			button{display:block;width:200px;margin:0 auto 10px auto;padding:10px;border:1px solid #fff;background:none;color:#fff;cursor:pointer;}
+			canvas{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
+			.r{width:100%;height:100%;position:relative;overflow:hidden;display:flex;background:#000;}
+			.cw{position:relative;flex:1 1 100%;display:none;}
+			.s{width:100vw;height:100vh;display:flex;flex-direction:column;justify-content:center;}
+		</style>
 		`;
 
-		document.title = `Demo`;
+		document.title = "DEMO2";
 
-		this.canvasWrap = document.querySelector( '.cw' )!;
+		this.rootElm = document.createElement( 'div' );
+		this.rootElm.classList.add( 'r' );
+		document.body.appendChild( this.rootElm );
+
+		this.canvasWrapElm = document.createElement( 'div' );
+		this.canvasWrapElm.classList.add( 'cw' );
+		this.rootElm.appendChild( this.canvasWrapElm );
 
 		this.canvas = canvas;
-		this.canvasWrap.appendChild( this.canvas );
+		this.canvasWrapElm.appendChild( this.canvas );
+
+		const startElm = document.createElement( 'div' );
+		startElm.classList.add( "s" );
+		this.rootElm.appendChild( startElm );
+
+		const fullScreen = document.createElement( 'button' );
+		fullScreen.innerText = '1. Full Screen';
+		fullScreen.onclick = () => {
+
+			var elem = document.documentElement;
+
+			if ( elem.requestFullscreen ) {
+
+				elem.requestFullscreen();
+
+			}
+
+
+		};
+
+		startElm.appendChild( fullScreen );
+
+		const play = () => {
+
+			startElm.style.display = "none";
+			this.canvasWrapElm.style.display = 'block';
+			this.canvasWrapElm.style.cursor = 'none';
+
+			this.resize();
+
+			// world.elapsedTime = 0;
+			// world.lastUpdateTime = new Date().getTime();
+
+			this.scene.play();
+
+			this.animate();
+
+		};
+
+		const playButton = document.createElement( 'button' );
+		playButton.innerText = 'ready...';
+		playButton.disabled = true;
+		playButton.onclick = play;
+
+		startElm.appendChild( playButton );
 
 		// scene
 
 		this.scene = new Scene();
+
+		setTimeout( () => {
+
+			this.resize();
+
+			this.scene.update();
+
+			playButton.innerText = '2. Play!';
+			playButton.disabled = false;
+
+		}, 100 );
 
 		// music
 
@@ -80,7 +149,7 @@ class App {
 				memoryElm.style.left = "0";
 				memoryElm.style.overflowY = 'auto';
 				memoryElm.style.fontSize = "12px";
-				this.canvasWrap.appendChild( memoryElm );
+				this.canvasWrapElm.appendChild( memoryElm );
 
 				const timerElm = document.createElement( 'div' );
 				timerElm.classList.add( "dev" );
@@ -93,9 +162,9 @@ class App {
 				timerElm.style.right = "0";
 				timerElm.style.overflowY = 'auto';
 				timerElm.style.fontSize = "12px";
-				this.canvasWrap.appendChild( timerElm );
+				this.canvasWrapElm.appendChild( timerElm );
 
-				this.canvasWrap.style.fontFamily = "'Share Tech Mono', monospace";
+				this.canvasWrapElm.style.fontFamily = "'Share Tech Mono', monospace";
 
 				gpuState.init( memoryElm, timerElm );
 

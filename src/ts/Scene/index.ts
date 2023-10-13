@@ -115,6 +115,12 @@ export class Scene extends GLP.EventEmitter {
 
 	}
 
+	public play() {
+
+		this.emit( 'play' );
+
+	}
+
 	public dispose() {
 
 		this.emit( 'dispose' );
