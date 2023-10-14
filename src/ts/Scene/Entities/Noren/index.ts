@@ -3,7 +3,7 @@ import * as GLP from 'glpower';
 import norenVert from './shaders/noren.vs';
 import norenFrag from './shaders/noren.fs';
 import { hotGet, hotUpdate } from '~/ts/libs/glpower_local/Framework/Utils/Hot';
-import { globalUniforms } from '~/ts/Globals';
+import { gl, globalUniforms } from '~/ts/Globals';
 
 export class Noren extends GLP.Entity {
 
@@ -12,6 +12,25 @@ export class Noren extends GLP.Entity {
 		super();
 
 		const height = 1.25;
+
+		const img = document.createElement( "img" );
+		img.src = "data:image/svg+xml," + encodeURIComponent( `
+		<svg width="512" height="256" viewBox="0 0 512 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<path d="M128.985 95.4286H80.9254V157.143H183.91V44H26V212H252.567V44H486V212H324.657V95.4286H431.075V157.143H376.149" stroke="white" stroke-width="16"/>
+		</svg>
+		` );
+
+		const texture = new GLP.GLPowerTexture( gl );
+		texture.setting( {
+			wrapS: gl.REPEAT,
+			// wrapT: gl.REPEAT,
+		} );
+
+		img.onload = () => {
+
+			texture.attach( img );
+
+		};
 
 		/*-------------------------------
 			bou
@@ -58,7 +77,12 @@ export class Noren extends GLP.Entity {
 		const mat = hata.addComponent( 'material', new GLP.Material( {
 			vert: hotGet( 'norenVert', norenVert ),
 			frag: hotGet( 'norenFrag', norenFrag ),
-			uniforms: GLP.UniformsUtils.merge( globalUniforms.time ),
+			uniforms: GLP.UniformsUtils.merge( globalUniforms.time, {
+				uTex: {
+					value: texture,
+					type: '1i'
+				}
+			} ),
 			defines: { 'HATA': '' },
 			cullFace: false,
 		} ) );

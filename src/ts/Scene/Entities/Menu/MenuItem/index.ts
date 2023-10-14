@@ -12,7 +12,7 @@ export class MenuItem extends GLP.Entity {
 
 		name = name.toUpperCase();
 
-		price += "円";
+		price += decodeURI( "%E5%86%86" );
 
 		const size = new GLP.Vector( 0.3, 1.0 );
 

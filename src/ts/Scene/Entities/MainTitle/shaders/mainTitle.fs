@@ -38,6 +38,7 @@ void main( void ) {
 		
 	}
 
+	outEmission += uState.y;
 
 	outRoughness = smoothstep( 0.2, 0.7, n.x ) + 0.02;
 

@@ -12,7 +12,7 @@
 
 #endif
 
-#ifdef GYOZA
+#if defined( GYOZA ) || defined( SHOYU )
 
 	uniform vec4 uState;
 
@@ -89,6 +89,7 @@ vec2 D( vec3 p ) {
 		q2.y += 0.11;
 		d = add( d, vec2( sdBox( vec3( q2, 0.0 ), vec3( 0.25, 0.04, 0.1  )), 0.0 ) );
 
+		d = add( d, vec2( sdBox( vec3( q2, 0.0 ) + vec3( 0.0, -0.05, 0.0 ), vec3( 0.3, 0.001, 0.2  )), 1.0 ) );
 
 	#endif
 
@@ -112,7 +113,6 @@ vec2 D( vec3 p ) {
 		q2.x += 0.4;
 		q2.y += 0.11;
 		d = add( d, vec2( sdBox( vec3( q2, 0.0 ), vec3( 0.3, 0.04, 0.1  )), 0.0 ) );
-
 
 	#endif
 
@@ -163,6 +163,20 @@ void main( void ) {
 		outColor.xyz = vec3( 1.0, 1.0, 1.0 );
 		
 	}
+	
+	#ifdef SHOYU
+		if( dist.y == 1.0 )  {
+
+			outColor.xyz = mix(
+				vec3( 1.0, 1.0, 1.0 ),
+				mix( vec3( 0.3, 0.1, 0.0 ), vec3( 0.9, 0.15, 0.0 ), smoothstep( 0.1, 0.6,  length( rayPos.xz ) ) ),
+				uState.x
+			);
+			
+			outRoughness = 0.02;
+			
+		}
+	#endif
 		
 	outNormal = normalize(modelMatrix * vec4( normal, 0.0 )).xyz;
 
