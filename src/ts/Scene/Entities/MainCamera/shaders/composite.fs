@@ -7,6 +7,7 @@ uniform vec3 cameraPosition;
 uniform float cameraNear;
 uniform float cameraFar;
 uniform float uVisible;
+uniform float uVignette;
 
 in vec2 vUv;
 
@@ -31,7 +32,7 @@ void main( void ) {
 	vec2 uv = vUv;
 	vec2 cuv = uv - 0.5;
 	float len = length(cuv);
-	float w = 0.04;
+	float w = 0.04 + uVignette * 0.2;
 
 	float d;
 	#pragma loop_start 8

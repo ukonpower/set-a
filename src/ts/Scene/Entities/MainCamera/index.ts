@@ -522,7 +522,7 @@ export class MainCamera extends GLP.Entity {
 		// composite
 
 		this.composite = new GLP.PostProcessPass( {
-			name: 'dof/bokeh',
+			name: 'composite',
 			frag: compositeFrag,
 			uniforms: GLP.UniformsUtils.merge( this.commonUniforms, {
 				uBloomTexture: {
@@ -530,6 +530,10 @@ export class MainCamera extends GLP.Entity {
 					type: '1iv'
 				},
 				uVisible: {
+					value: 0,
+					type: "1f"
+				},
+				uVignette: {
 					value: 0,
 					type: "1f"
 				}
@@ -635,6 +639,7 @@ export class MainCamera extends GLP.Entity {
 			// visible
 
 			this.composite.uniforms.uVisible.value = state.z;
+			this.composite.uniforms.uVignette.value = state.w;
 
 		}
 
