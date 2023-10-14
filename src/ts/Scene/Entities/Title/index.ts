@@ -18,9 +18,6 @@ export class Title extends GLP.Entity {
 
 		img.onload = () => {
 
-			console.log( img );
-
-
 			texture.attach( img );
 
 		};

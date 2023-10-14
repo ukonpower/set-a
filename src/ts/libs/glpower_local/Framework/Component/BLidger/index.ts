@@ -89,15 +89,15 @@ export class BLidger extends Component {
 
 			// transform
 
-			entity.position.copy( this.node.position );
+			entity.position.set( this.node.position[ 0 ], this.node.position[ 1 ], this.node.position[ 2 ] );
 
 			entity.quaternion.setFromEuler( {
-				x: this.node.rotation.x + this.rotationOffsetX,
-				y: this.node.rotation.y,
-				z: this.node.rotation.z,
+				x: this.node.rotation[ 0 ] + this.rotationOffsetX,
+				y: this.node.rotation[ 1 ],
+				z: this.node.rotation[ 2 ],
 			}, 'YZX' );
 
-			entity.scale.copy( this.node.scale );
+			entity.scale.set( this.node.scale[ 0 ], this.node.scale[ 1 ], this.node.scale[ 2 ] );
 
 			// geometry
 

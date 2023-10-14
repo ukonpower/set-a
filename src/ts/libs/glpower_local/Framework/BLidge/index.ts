@@ -42,9 +42,9 @@ export type BLidgeNode = {
 	parent: string,
 	children: BLidgeNode[],
 	animation: BLidgeAnimationAccessor,
-	position: IVector3,
-	rotation: IVector3,
-	scale: IVector3,
+	position: number[],
+	rotation: number[],
+	scale: number[],
 	material: BLidgeMaterialParam
 	visible: boolean,
 }
@@ -111,9 +111,9 @@ export type BLidgeCurveParam = {
 }
 
 export type BLidgeKeyFrameParam = {
-    c: IVector2;
-    h_l?: IVector2;
-    h_r?: IVector2;
+    c: number[];
+    h_l?: number[];
+    h_r?: number[];
     e: string;
     i: "B" | "L" | "C";
 }
@@ -277,7 +277,11 @@ export class BLidge extends EventEmitter {
 						"L": "LINEAR",
 					}[ frame.i ];
 
-					return new FCurveKeyFrame( frame.c, frame.h_l, frame.h_r, interpolation as FCurveInterpolation );
+					return new FCurveKeyFrame(
+						{ x: frame.c[ 0 ], y: frame.c[ 1 ] },
+						frame.h_l && { x: frame.h_l[ 0 ], y: frame.h_l[ 1 ] },
+						frame.h_r && { x: frame.h_r[ 0 ], y: frame.h_r[ 1 ] },
+					interpolation as FCurveInterpolation );
 
 				} ) );
 
