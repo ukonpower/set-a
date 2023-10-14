@@ -102,6 +102,12 @@ class App {
 			playButton.innerText = '2. Play!';
 			playButton.disabled = false;
 
+			if ( process.env.NODE_ENV == "development" ) {
+
+				this.play();
+
+			}
+
 		} );
 
 		/*-------------------------------
@@ -123,6 +129,9 @@ class App {
 				this.music.stop();
 
 			}
+
+			// this.scene.play( t );
+			// this.scene.elapsedTime = t;
 
 		} );
 

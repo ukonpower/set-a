@@ -83,8 +83,6 @@ export class Camera extends Component {
 
 		this.viewMatrix.copy( event.entity.matrixWorld ).inverse();
 
-		this.projectionMatrixPrev.copy( this.projectionMatrix );
-
 		if ( this.needsUpdate ) {
 
 			this.updateProjectionMatrix();
