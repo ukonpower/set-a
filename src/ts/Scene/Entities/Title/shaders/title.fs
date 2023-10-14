@@ -4,6 +4,8 @@
 #include <frag_h>
 
 uniform sampler2D uTex;
+uniform vec4 uState;
+
 
 void main( void ) {
 
@@ -16,7 +18,18 @@ void main( void ) {
 		discard;
 		
 	}
-	
-	#include <frag_out>
 
+	// if( uState.x == 0.0  ) {
+
+	// 	if( c.x < 0.5 ) {
+
+	// 		discard;
+			
+	// 	}
+
+
+	// }
+	
+	outColor0 = vec4( 1.0, 1.0, 1.0, 1.0 );
+	
 } 
