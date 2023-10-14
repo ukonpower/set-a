@@ -19,17 +19,6 @@ void main( void ) {
 		
 	}
 
-	// if( uState.x == 0.0  ) {
-
-	// 	if( c.x < 0.5 ) {
-
-	// 		discard;
-			
-	// 	}
-
-
-	// }
-	
 	outColor0 = vec4( 1.0, 1.0, 1.0, 1.0 );
 	
 } 

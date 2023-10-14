@@ -8,7 +8,7 @@
 	"scripts": {
 		"dev": "vite",
 		"build:js": "vite build",
-		"build:png": "jsexe.exe -po -cn ./public/index.js ./public/demo.html",
+		"build:png": "jsexe.exe -po -cn ./public/index.js ./public/set-a.html",
 		"build": "npm run build:js && npm run build:png"
 	},
 	"workspaces": [

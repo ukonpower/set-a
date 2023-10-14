@@ -27,8 +27,8 @@ void main( void ) {
 
 	float head = vUv.x < pixel.x ? 1.0 : 0.0;
 
-	vec3 noisePosition = position.xyz * ( 0.20 + ( 1.0 - head ) * 0.1 + 0.2 * (1.0 - uState.x) ) + vUv.y * 0.01;
-	vec3 noise = fbm3( noisePosition + uTime * ( 0.1 + head * 0.9 ) ) - 0.45;
+	vec3 noisePosition = position.xyz * ( 0.20 + ( 1.0 - head ) * 0.1 + 0.2 * (1.0 - uState.x) ) + vUv.y * 0.35;
+	vec3 noise = fbm3( noisePosition + uTime * ( 0.5 + head * 0.5 ) ) - 0.45;
 
 	if( vUv.x < pixel.x ) {
 
@@ -46,11 +46,11 @@ void main( void ) {
 
 		vec3 gravity = vec3( 0.00001 );
 
-		vec3 gPos = position.xyz + vec3( 0.0, -4.5 + ( -8.0 * ( 1.0 - uState.x )), 0.0 );
+		vec3 gPos = position.xyz + vec3( 0.0, -4.5, 0.0 );
 		gravity += gPos.xyz * smoothstep( 1.0, 4.0, length( gPos.xyz ) ) * -vec3(0.003, 0.01, 0.003);
 
 		gPos = position.xyz + vec3( 0.0, 0.0, 0.0 );
-		gravity += gPos.xyz * smoothstep( 0.0, 0.001, length( gPos.xyz ) ) * -vec3(0.2) * smoothstep( 0.0, 1.0, -vUv.y + linearstep( 0.0, 1.0, uState.y ) * 2.0 );
+		gravity += gPos.xyz * smoothstep( 0.0, 0.001, length( gPos.xyz ) ) * -vec3(0.2) * (smoothstep( 0.0, 1.0, -vUv.y + linearstep( 0.0, 1.0, uState.y ) * 2.0 ) + ( 1.0 - uState.x) ) * mix( vec3( 0.2, 1.0, 0.2 ), vec3( 1.0, 1.0, 1.0 ), uState.x );
 
 		velocity.xyz += gravity;
 
@@ -70,7 +70,7 @@ void main( void ) {
 		vec3 diff = position.xyz - prevPos.xyz;
 
 		position.xyz = mix( position.xyz, texture( gpuSampler0, vUv - vec2( pixel.x, 0.0 ) ).xyz, 0.9 );
-		position.xyz += noise * 0.03;
+		position.xyz += noise * 0.035;
 		
 	}
 

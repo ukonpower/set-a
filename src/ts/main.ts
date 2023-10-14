@@ -36,7 +36,7 @@ class App {
 			</style>
 		`;
 
-		document.title = "DEMO2";
+		document.title = "Set-A";
 
 		this.rootElm = document.createElement( 'div' );
 		this.rootElm.classList.add( 'r' );
@@ -97,7 +97,11 @@ class App {
 
 			this.resize();
 
-			this.scene.update( { forceDraw: true } );
+			if ( process.env.NODE_ENV == "production" ) {
+
+				this.scene.update( { forceDraw: true } );
+
+			}
 
 			playButton.innerText = '2. Play!';
 			playButton.disabled = false;
@@ -108,6 +112,22 @@ class App {
 
 			}
 
+			blidge.on( 'sync/timeline', ( e:GLP.BLidgeFrame ) => {
+
+				const t = e.current / e.fps;
+
+				if ( e.playing ) {
+
+					this.music.play( t );
+
+				} else {
+
+					this.music.stop();
+
+				}
+
+			} );
+
 		} );
 
 		/*-------------------------------
@@ -116,24 +136,7 @@ class App {
 
 		this.music = new Music();
 
-		blidge.on( 'sync/timeline', ( e:GLP.BLidgeFrame ) => {
 
-			const t = e.current / e.fps;
-
-			if ( e.playing ) {
-
-				this.music.play( t );
-
-			} else {
-
-				this.music.stop();
-
-			}
-
-			// this.scene.play( t );
-			// this.scene.elapsedTime = t;
-
-		} );
 
 		/*-------------------------------
 			Event

@@ -56,7 +56,7 @@ export const globalUniforms: {[key: string]: GLP.Uniforms} = {
 -------------------------------*/
 
 import { GPUState } from '../libs/GPUState';
-export let gpuState: GPUState | undefined = undefined;
+export const gpuState: GPUState | undefined = undefined;
 
-import 'webgl-memory';
-gpuState = new GPUState();
+// import 'webgl-memory';
+// gpuState = new GPUState();

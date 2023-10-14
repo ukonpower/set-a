@@ -40,6 +40,8 @@ void main( void ) {
 
 	vec3 gravity = vec3( 0.00001 );
 
+	float mori = smoothstep( 0.7, 1.0, -id + linearstep( 0.0, 1.0, uParaState.z) * 2.0 );
+
 	vec3 gPos = position.xyz + vec3( 0.0, -2.0 - 4.0 * ( 1.0 - uParaState.w ) , 0.0 );
 	gravity += gPos.xyz * smoothstep( 1.0, 3.0, length( gPos.xyz ) ) * -vec3(0.001, 0.005, 0.001) * ( 1.0 - smoothstep( 0.0, 1.0, -id + uParaState.x * 2.0 ) );
 
@@ -47,7 +49,9 @@ void main( void ) {
 	gravity += gPos.xyz * smoothstep( 1.0, 3.0, length( gPos.xyz ) ) * -vec3(0.01) * uParaState.x * (1.0 - uParaState.z);
 
 	gPos = position.xyz + vec3( 0.0, 0.0, 0.0 );
-	gravity += gPos.xyz * smoothstep( 0.0, 0.01, length( gPos.xyz ) ) * -vec3(0.1) * smoothstep( 0.7, 1.0, -id + linearstep( 0.0, 1.0, uParaState.z) * 2.0 );
+	gravity += gPos.xyz * smoothstep( 0.0, 0.01, length( gPos.xyz ) ) * -vec3(0.1) * mori;
+
+	velocity *= 1.0 - mori * 0.5;
 
 	velocity.xyz += gravity;
 

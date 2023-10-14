@@ -80,7 +80,10 @@ mat4 getMat( float time ) {
 
 	move = mix( posRot, posAlign, clamp(uState.w, 1.0, 2.0 ) - 1.0 );
 	move.y += sin( fin * PI ) * 0.3;
-	move.y -= fin * 0.22;
+	move.y -= fin * 0.21;
+	move.y += (1.0 - fin * sin( num.x * PI)) * 0.025;
+	move.x += fin * -0.1;
+
 	// move.x += fin * 0.15;
 
 	instanceMatrix = mat4(

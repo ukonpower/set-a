@@ -10,6 +10,8 @@ export class MenuItem extends GLP.Entity {
 
 		super();
 
+		name = name.toUpperCase();
+
 		price += "円";
 
 		const size = new GLP.Vector( 0.3, 1.0 );
@@ -36,9 +38,9 @@ export class MenuItem extends GLP.Entity {
 		ctx.fillStyle = "#FFF";
 		ctx.fillRect( padding, padding, canvas.width - padding * 2, canvas.height - padding * 2 );
 
-		const fontSize = canvas.height * 0.9 / name.length;
+		const fontSize = canvas.height * 0.85 / name.length;
 		ctx.fillStyle = "#000";
-		ctx.font = `${fontSize}px 'ＭＳ ゴシック'`;
+		ctx.font = `bold ${fontSize}px 'Yu Gothic'`;
 
 		let hSum = 0.0;
 
@@ -66,16 +68,16 @@ export class MenuItem extends GLP.Entity {
 		for ( let i = 0; i < cList.length; i ++ ) {
 
 			const c = cList[ i ];
-			ctx.fillText( c.c, x, y );
+			ctx.fillText( c.c, canvas.width / 2 - c.data.width / 2, y );
 
 			x += 0;
-			y += c.h * 0.80;
+			y += c.h * 0.67;
 
 		}
 
 		// price
 
-		ctx.font = `${35}px 'ＭＳ ゴシック'`;
+		ctx.font = `bold ${35}px 'Yu Gothic'`;
 
 		const priceData = ctx.measureText( price );
 		ctx.translate( canvas.width / 2 - priceData.width / 2, canvas.height - 40 );
